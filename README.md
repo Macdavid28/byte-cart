@@ -6,10 +6,10 @@ ByteCart is a professional, full-stack e-commerce platform designed for a seamle
 
 ### Frontend
 
-- **Framework:** React 19
+- **Framework:** React
 - **Build Tool:** Vite
-- **Styling:** Vanilla CSS (Modern, Responsive)
-- **State Management:** Hooks & Context API (as applicable)
+- **Styling:** Tailwind CSS
+- **State Management:** Hooks & Zustand
 
 ### Backend
 
@@ -18,7 +18,8 @@ ByteCart is a professional, full-stack e-commerce platform designed for a seamle
 - **Database:** MongoDB (via Mongoose)
 - **Authentication:** JWT (JSON Web Tokens) & bcryptjs
 - **File Uploads:** Multer & Cloudinary
-- **Email Service:** Brevo / Resend
+- **Email Service:** Brevo
+- **Testing:** Postman
 - **Security:** Express Rate Limit, Cookie Parser
 
 ---
@@ -107,9 +108,12 @@ cd byte-cart
 
 ### Authentication (`/api/auth/v1`)
 
-- `POST /register`: Register a new user.
+- `POST /signup`: Register a new user.
 - `POST /login`: Authenticate user and issue JWT.
-- `GET /profile`: Get current user details (Protected).
+- `POST /verify-email`: verify a new user.
+- `POST /forgot-password`: user forgot password.
+- `POST /reset-password/:code`: pass reset password token to reset password.
+- `POST /logout`: Logout a new user.
 
 ### Products (`/api/products`)
 
@@ -120,6 +124,9 @@ cd byte-cart
 ### Users (`/api/users`)
 
 - `GET /`: List all users (Admin Only).
+- `GET /user/:id`: List users by admin (Admin Only).
+- `PUT /user/profile`: Get current user details (Protected).
+- `DELETE /user/:id`: List users by admin (Admin Only).
 
 ---
 
