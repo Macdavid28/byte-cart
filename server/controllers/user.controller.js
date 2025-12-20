@@ -38,7 +38,7 @@ export const getUserById = async (req, res) => {
   }
 };
 // get personal user
-export const getMe = async (req, res) => {
+export const getProfile = async (req, res) => {
   const userId = req.userId;
   try {
     const me = await User.findById(userId).select("-password");
@@ -76,7 +76,7 @@ export const deleteUser = async (req, res) => {
   }
 };
 // update user details
-export const updateMyDetails = async (req, res) => {
+export const updateMyProfile = async (req, res) => {
   const { name, username, email, password, displayPicture } = req.body;
   const userId = req.userId;
   try {
