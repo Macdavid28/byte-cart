@@ -9,7 +9,7 @@ ByteCart is a professional, full-stack e-commerce platform designed for a seamle
 - **Framework:** React 19
 - **Build Tool:** Vite
 - **Styling:** Vanilla CSS (Modern, Responsive)
-- **State Management:** Hooks & Context API (as applicable)
+- **State Management:** Hooks & Context API
 
 ### Backend
 
@@ -58,7 +58,7 @@ byte-cart/
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/macdavid28/byte-cart.git
 cd byte-cart
 ```
 
@@ -107,9 +107,13 @@ cd byte-cart
 
 ### Authentication (`/api/auth/v1`)
 
-- `POST /register`: Register a new user.
+- `POST /signup`: Register a new user.
 - `POST /login`: Authenticate user and issue JWT.
-- `GET /profile`: Get current user details (Protected).
+- `POST /logout`: Logout user.
+- `POST /verify-email`: Verify email with token.
+- `POST /forgot-password`: Send password reset link.
+- `POST /reset-password/:code`: Reset password using code.
+- `GET /check-auth`: Check current authentication status.
 
 ### Products (`/api/products`)
 
@@ -119,7 +123,11 @@ cd byte-cart
 
 ### Users (`/api/users`)
 
-- `GET /`: List all users (Admin Only).
+- `GET /all`: List all users (Admin Only).
+- `GET /user/profile`: Get authenticated user profile.
+- `PUT /user/update/profile`: Update user profile details.
+- `GET /user/:id`: Get user by ID (Admin Only).
+- `DELETE /user/:id`: Delete user (Admin Only).
 
 ---
 
