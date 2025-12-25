@@ -8,6 +8,7 @@ import { authRoutes } from "./server/routes/auth.routes.js";
 import { productRoutes } from "./server/routes/product.routes.js";
 import { adminRoute } from "./server/routes/admin.routes.js";
 import { userRoutes } from "./server/routes/user.routes.js";
+import { couponRoutes } from "./server/routes/coupon.routes.js";
 dotenv.config();
 const app = express();
 const authLimiter = expressRateLimit({
@@ -28,7 +29,8 @@ app.use(cookieParser());
 // Apply global rate limiting to all requests
 app.use(globalLimiter);
 app.use("/api/auth/v1", authLimiter, authRoutes);
-app.use("/api/", authLimiter, adminRoute);
+app.use("/api/admin", authLimiter, adminRoute);
+app.use("/api/coupon", couponRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 const PORT = process.env.SERVER_PORT || 5000;

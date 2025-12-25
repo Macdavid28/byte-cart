@@ -3,6 +3,8 @@ import { upload } from "../config/multer.js";
 import {
   createNewProduct,
   getAllProducts,
+  getProductById,
+  updateProduct,
 } from "../controllers/products.controller.js";
 import { authMiddleware } from "./../middleware/authMiddleware.js";
 import { isAdmin } from "../middleware/adminMiddleware.js";
@@ -16,4 +18,11 @@ productRoutes.post(
   upload.single("coverImage"),
   createNewProduct
 );
-productRoutes.get("/all-products", getAllProducts);
+productRoutes.get("/all", getAllProducts);
+productRoutes.get("/product/:id", getProductById);
+productRoutes.put(
+  "/update/:id",
+  authMiddleware,
+  isAdmin,
+  upload.single("coverImage"),updateProduct
+);

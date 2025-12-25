@@ -37,7 +37,8 @@ export const getUserById = async (req, res) => {
     });
   }
 };
-// get personal user
+
+// get user profile
 export const getProfile = async (req, res) => {
   const userId = req.userId;
   try {
@@ -56,26 +57,7 @@ export const getProfile = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const userId = await User.findById(id);
-    if (!userId) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found or has been deleted",
-      });
-    }
-    await User.findByIdAndDelete(id);
-    return res.json({ success: true, message: "User Deleted" });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Internal Server Error",
-    });
-  }
-};
-// update user details
+// update profile details
 export const updateMyProfile = async (req, res) => {
   const { name, username, email, password, displayPicture } = req.body;
   const userId = req.userId;
@@ -89,13 +71,7 @@ export const updateMyProfile = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found" });
     }
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
-      return res.status(409).json({
-        success: false,
-        message: "Admin email cannot register as user",
-      });
-    }
+
     const takenUsername = await User.findOne({ username });
     if (takenUsername) {
       return res
@@ -154,11 +130,50 @@ export const updateMyProfile = async (req, res) => {
     } else if (displayPicture) {
       user.displayPicture = displayPicture;
     }
-
     // Save changes
     await user.save();
     return res.status(200).json({ success: true, details: user });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const deleteProfile = async (req, res) => {
+  const userId = req.userId;
+  try {
+    const profile = await User.findById(userId);
+    if (!profile) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Profile Not Found" });
+    }
+    await User.findByIdAndDelete(userId);
+    return res.status(200).json({ success: true, message: "Account deleted" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Delete User
+export const deleteUser = async (req, res) => {
+  // pass user id as parameter
+  const { id } = req.params;
+  try {
+    // check if user id exists in database
+    const userId = await User.findById(id);
+    if (!userId) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found or has been deleted",
+      });
+    }
+    // delete user
+    await User.findByIdAndDelete(id);
+    return res.json({ success: true, message: "User Deleted" });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
   }
 };
