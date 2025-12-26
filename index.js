@@ -1,14 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
-import { connectDb } from "./server/config/connectDb.js";
-import expressRateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
-// import { verifyToken } from "./server/middleware/verify-token.js";
+import expressRateLimit from "express-rate-limit";
+import { connectDb } from "./server/config/connectDb.js";
 import { authRoutes } from "./server/routes/auth.routes.js";
 import { productRoutes } from "./server/routes/product.routes.js";
 import { adminRoute } from "./server/routes/admin.routes.js";
 import { userRoutes } from "./server/routes/user.routes.js";
 import { couponRoutes } from "./server/routes/coupon.routes.js";
+import { categoryRoutes } from "./server/routes/category.routes.js";
 dotenv.config();
 const app = express();
 const authLimiter = expressRateLimit({
@@ -31,6 +31,7 @@ app.use(globalLimiter);
 app.use("/api/auth/v1", authLimiter, authRoutes);
 app.use("/api/admin", authLimiter, adminRoute);
 app.use("/api/coupon", couponRoutes);
+app.use("/api/category", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 const PORT = process.env.SERVER_PORT || 5000;

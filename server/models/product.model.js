@@ -15,18 +15,18 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-    // category: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Category",
-    // },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    },
     coverImage: {
       type: String,
       required: true,
     },
-    // images: {
-    //   type: [String],
-    //   default: [],
-    // },
+    images: {
+      type: [String],
+      default: [],
+    },
     stock: {
       type: Number,
       required: true,

@@ -9,7 +9,7 @@ export const generateJwt = (res, userId, adminId) => {
     httpOnly: true,
     sameSite: "strict",
     secure: nodeEnvironment === "production",
-    maxAge: 10 * 60 * 1000, //7 days
+    maxAge: 10 * 60 * 1000, //10 minutes
   });
   return token;
 };

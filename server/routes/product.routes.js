@@ -16,6 +16,7 @@ productRoutes.post(
   authMiddleware,
   isAdmin,
   upload.single("coverImage"),
+  upload.array("images"),
   createNewProduct
 );
 productRoutes.get("/all", getAllProducts);
@@ -24,5 +25,6 @@ productRoutes.put(
   "/update/:id",
   authMiddleware,
   isAdmin,
-  upload.single("coverImage"),updateProduct
+  upload.single("coverImage"),
+  updateProduct
 );

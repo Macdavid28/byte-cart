@@ -1,4 +1,5 @@
 import cloudinary from "../config/cloudinary.js";
+import { Category } from "../models/category.model.js";
 import { Product } from "../models/product.model.js";
 
 export const createNewProduct = async (req, res) => {
@@ -9,7 +10,6 @@ export const createNewProduct = async (req, res) => {
       !name ||
       !description ||
       price === undefined ||
-      // !category ||
       stock === undefined ||
       !color ||
       (!req.file && !coverImage)
@@ -19,6 +19,12 @@ export const createNewProduct = async (req, res) => {
         message: "Fill In All Required Fields",
       });
     }
+    const categoryId = await Category.findById(category);
+    if (!categoryId) {
+      return res
+        .status(404)
+        .json({ success: false, message: "invalid category" });
+    }
     // let finalImageUrl = coverImage;
     if (req.file) {
       const imageUpload = await cloudinary.uploader.upload(req.file.path, {
@@ -26,12 +32,24 @@ export const createNewProduct = async (req, res) => {
       });
       coverImage = imageUpload.secure_url;
     }
+    let images = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const imagesUpload = await cloudinary.uploader.upload(file.path, {
+          folder: "bytecart",
+        });
+        images.push(imagesUpload.secure_url);
+      }
+    }
     const newProduct = await Product.create({
       ...req.body,
       admin: req.adminId,
       coverImage,
+      category: categoryId._id,
     });
-    const product = await Product.findById(newProduct._id).select("-admin");
+    const product = await Product.findById(newProduct._id)
+      .select("-admin")
+      .populate("category", "name -_id");
 
     return res.status(201).json({
       success: true,
@@ -94,6 +112,7 @@ export const updateProduct = async (req, res) => {
   const { id } = req.params;
   try {
     const product = await Product.findById(id);
+
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -101,6 +120,12 @@ export const updateProduct = async (req, res) => {
       });
     }
     const adminId = req.adminId;
+    const categoryId = await Category.findById(category);
+    if (!categoryId) {
+      return res
+        .status(404)
+        .json({ success: false, message: "invalid category" });
+    }
     if (name !== undefined) {
       product.name = name;
     }
@@ -117,12 +142,21 @@ export const updateProduct = async (req, res) => {
       product.color = color;
     }
     if (req.file) {
-      const imageUpload = await cloudinary.uploader.upload({
+      const imageUpload = await cloudinary.uploader.upload(req.file.path, {
         folder: "bytecart",
       });
       coverImage = imageUpload.secure_url;
     } else if (coverImage !== undefined) {
       product.coverImage = coverImage;
+    }
+    let images = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const imagesUpload = await cloudinary.uploader.upload(file.path, {
+          folder: "bytecart",
+        });
+        images.push(imagesUpload.secure_url);
+      }
     }
     await Product.findByIdAndUpdate(product, adminId).select("-admin");
     return res.status(200).json({ success: true, product: product });

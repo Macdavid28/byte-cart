@@ -37,6 +37,10 @@ export const createCoupon = async (req, res) => {
 };
 export const getAllCoupons = async (req, res) => {
   try {
+    const admin = req.adminId;
+    if (!admin) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
     const coupons = await Coupon.find({}).select("-admin");
     if (!coupons) {
       return res
@@ -54,6 +58,12 @@ export const getAllCoupons = async (req, res) => {
 export const getCouponById = async (req, res) => {
   const { id } = req.params;
   try {
+    const admin = req.adminId;
+    if (!admin) {
+      return res
+        .status(401)
+        .status({ success: false, message: "Unauthorized" });
+    }
     const uniqueCoupon = await Coupon.findById(id);
     if (!coupon) {
       return res.status(404).json({
