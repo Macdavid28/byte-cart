@@ -75,7 +75,7 @@ export const getAllProducts = async (req, res) => {
     }
     return res
       .status(200)
-      .json({ success: true, products: { ...allProducts } });
+      .json({ success: true, products: allProducts });
   } catch (error) {
     return res.status(500).json({
       success: false,

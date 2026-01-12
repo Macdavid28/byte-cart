@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  login,
   logout,
   updateAdminProfile,
 } from "../controllers/admin.controller.js";
@@ -9,7 +8,6 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 export const adminRoute = express.Router();
 
-adminRoute.post("/login", login);
 adminRoute.put(
   "/update/profile",
   upload.single("displayPicture"),

@@ -180,6 +180,7 @@ export const login = async (req, res) => {
     user.isLoggedIn = true;
     await user.save();
     const token = generateJwt(res, user._id);
+    await sendWelcomeEmail(user.email, user.name);
     return res.status(200).json({
       success: true,
       message: "User Login Successful",
@@ -359,5 +360,48 @@ export const checkAuth = async (req, res) => {
     res.status(200).json({ success: true, user });
   } catch (error) {
     res.status(404).json({ success: false, message: "User Not Found" });
+  }
+};
+
+
+export const adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Fill in all required fields" });
+    }
+    const admin = await Admin.findOne({
+      email,
+    });
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: "Admin not found",
+      });
+    }
+    // Check if password is valid
+    const validPassword = await bcryptjs.compare(password, admin.password);
+    if (!validPassword) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Credentials",
+      });
+    }
+
+    const token = generateJwt(res, null, admin._id);
+    return res.status(200).json({
+      success: true,
+      message: "Admin Login Successful",
+      admin: { ...admin._doc, token, password: null },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
   }
 };

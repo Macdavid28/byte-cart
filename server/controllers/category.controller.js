@@ -11,7 +11,7 @@ export const createCategory = async (req, res) => {
   const existingCategory = await Category.findOne({
     name: nameCheck,
   });
-  if (!existingCategory) {
+  if (existingCategory) {
     return res.status(409).json({ success: false, message: "Category Exists" });
   }
   const newCategory = await Category.create({
@@ -24,6 +24,7 @@ export const createCategory = async (req, res) => {
     category: category,
   });
 };
+
 export const getAllCategories = async (req, res) => {
   try {
     const allCategories = await Category.findOne({}).select("-admin");
@@ -38,6 +39,50 @@ export const getAllCategories = async (req, res) => {
     });
   }
 };
-export const getCategoryById = async (req, res) => {};
-export const updateCategory = async (req, res) => {};
-export const deleteCategory = async (req, res) => {};
+export const getCategoryById = async (req, res) => {
+    const { id } = req.params;
+    try {
+    const category = await Category.findById(id).select("-admin");
+    if (!category) {
+      return res.status(404).json({ success: false, message: "Not found" });
+    }
+    return res.status(200).json({ success: true, category: category });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+export const updateCategory = async (req, res) => {
+  const adminId = req.adminId;  
+  const { id } = req.params;
+    try {
+    const category = await Category.findByIdAndUpdate(id, { admin: adminId }).select("-admin");
+    if (!category) {
+      return res.status(404).json({ success: false, message: "Not found" });
+    }
+    return res.status(200).json({ success: true, category: category });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+export const deleteCategory = async (req, res) => {
+  const adminId = req.adminId;
+  const { id } = req.params;
+    try {
+    const category = await Category.findByIdAndDelete(id, { admin: adminId }).select("-admin");
+    if (!category) {
+      return res.status(404).json({ success: false, message: "Not found" });
+    }
+    return res.status(200).json({ success: true, category: category });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};

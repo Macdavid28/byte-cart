@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import expressRateLimit from "express-rate-limit";
+import cors from "cors"
 import { connectDb } from "./server/config/connectDb.js";
 import { authRoutes } from "./server/routes/auth.routes.js";
 import { productRoutes } from "./server/routes/product.routes.js";
@@ -9,31 +9,38 @@ import { adminRoute } from "./server/routes/admin.routes.js";
 import { userRoutes } from "./server/routes/user.routes.js";
 import { couponRoutes } from "./server/routes/coupon.routes.js";
 import { categoryRoutes } from "./server/routes/category.routes.js";
+import { authLimit, generalLimit } from "./server/middleware/ratelimit.js";
 dotenv.config();
 const app = express();
-const authLimiter = expressRateLimit({
-  max: 100, //Limit each IP to 100 requests per windowMs
-  windowMs: 15 * 60 * 1000, //15 minutes
-  message: "Too many requests from this IP, please try again after 15 minutes",
-});
+const authLimiter = authLimit;
+const globalLimiter = generalLimit;
 
-const globalLimiter = expressRateLimit({
-  max: 1000, //Limit each IP to 1000 requests per windowMs
-  windowMs: 15 * 60 * 1000, //15 minutes
-  message: "Too many requests from this IP, please try again after 15 minutes",
-});
+const whiteList = [
+  "http://localhost:5173",
+  "https://byte-cart.vercel.app"
+]
+
+const corsOption = {
+  origin : (origin,callback)=>{
+    if (!origin || !whiteList.includes(origin)){
+      callback(null,true)
+    }
+    else{
+      callback(new Error("Not allowed by cors"))
+    }
+  },
+  credentials:true
+}
 
 app.use(express.json());
 app.use(cookieParser());
-
-// Apply global rate limiting to all requests
-app.use(globalLimiter);
+app.use(cors(corsOption))
 app.use("/api/auth/v1", authLimiter, authRoutes);
 app.use("/api/admin", authLimiter, adminRoute);
-app.use("/api/coupon", couponRoutes);
-app.use("/api/category", categoryRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/coupon", globalLimiter, couponRoutes);
+app.use("/api/category", globalLimiter, categoryRoutes);
+app.use("/api/products", globalLimiter, productRoutes);
+app.use("/api/users", globalLimiter, userRoutes);
 const PORT = process.env.SERVER_PORT || 5000;
 app.listen(PORT, () => {
   connectDb();
