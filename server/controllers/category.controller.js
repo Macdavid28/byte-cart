@@ -27,7 +27,7 @@ export const createCategory = async (req, res) => {
 
 export const getAllCategories = async (req, res) => {
   try {
-    const allCategories = await Category.findOne({}).select("-admin");
+    const allCategories = await Category.find({}).select("-admin");
     if (!allCategories) {
       return res.status(404).json({ success: false, message: "Not found" });
     }

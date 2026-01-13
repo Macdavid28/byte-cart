@@ -14,13 +14,14 @@ const couponSchema = new mongoose.Schema({
     max: 100,
   },
 
-  usageLimit: { type: Number, default: null, min: 1, max: 1 }, // total times coupon can be used
+  usageLimit: { type: Number, max: 10 }, // total times coupon can be used
   userLimit: { type: Number, default: null }, // times a single user can use
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   active: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  usedCount: { type: Number, default: 0 },
 });
 
 export const Coupon = mongoose.model("Coupons", couponSchema);

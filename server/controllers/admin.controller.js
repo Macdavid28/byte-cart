@@ -1,6 +1,4 @@
 import { Admin } from "../models/admin.model.js";
-import bcryptjs from "bcryptjs";
-import { generateJwt } from "../utils/cookies.js";
 import cloudinary from "../config/cloudinary.js";
 
 export const updateAdminProfile = async (req, res) => {
