@@ -7,11 +7,10 @@ const couponSchema = new mongoose.Schema({
     enum: ["percentage", "fixed", "free_shipping"],
     required: true,
   },
-  discountPercentage: {
+  value: {
     type: Number,
     required: true,
     min: 0,
-    max: 100,
   },
 
   usageLimit: { type: Number, max: 10 }, // total times coupon can be used

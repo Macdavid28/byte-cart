@@ -1,6 +1,8 @@
 import Cart from "../models/cart.model.js";
 import { User } from "../models/user.model.js";
 import { Product } from "../models/product.model.js";
+import { Coupon } from "../models/coupon.model.js";
+import { evaluateCouponState } from "../services/coupon.services.js";
 
 export const createCart = async (req, res) => {
   const userID = req.userId;
@@ -25,7 +27,7 @@ export const createCart = async (req, res) => {
       const cart = await Cart.create({ user: userID, items: [] });
     }
     const existingCartItemIndex = cart.items.findIndex(
-      (item) => item.product.toString() === productId
+      (item) => item.product.toString() === productId,
     );
     existingCartItem = cart.items[existingCartItemIndex];
     if (existingCartItem !== -1) {
@@ -50,5 +52,50 @@ export const createCart = async (req, res) => {
     cart.total = cart.subtotal - (cart.discount || 0);
 
     await cart.save();
+  } catch (error) {}
+};
+
+export const applyCouponToCart = async (req, res) => {
+  try {
+    coupon = await evaluateCouponState(coupon);
+    const cart = await Cart.findOne({ user: req.userId });
+    if (!cart) {
+      return res
+        .status(404)
+        .json({ success: false, message: "cart not found" });
+    }
+    const coupon = await Coupon.findOne({ code });
+    if (!coupon) {
+      return res
+        .status(404)
+        .json({ success: false, message: "coupon not found" });
+    }
+    if (Date.now() > coupon.endDate.getTime()) {
+      return res
+        .status(400)
+        .json({ success: false, message: "coupon is expired" });
+    }
+    if (Date.now() < coupon.startDate.getTime()) {
+      return res
+        .status(400)
+        .json({ success: false, message: "coupon is not active yet" });
+    }
+    if (coupon.active === false) {
+      return res
+        .status(400)
+        .json({ success: false, message: "coupon is not active" });
+    }
+    if (coupon.type === "percentage") {
+      cart.discount = (cart.subtotal * coupon.value) / 100;
+      cart.total = cart.subtotal - cart.discount;
+    }
+    if (coupon.type === "fixed") {
+      cart.discount = coupon.value;
+      cart.total = cart.subtotal - cart.discount;
+    }
+    if (coupon.type === "free_shipping") {
+      cart.discount = cart.subtotal;
+      cart.total = cart.subtotal - cart.discount;
+    }
   } catch (error) {}
 };
