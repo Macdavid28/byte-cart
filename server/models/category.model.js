@@ -6,6 +6,10 @@ const categorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    displayPicture:{
+      type:String,
+      required:true
+    },
     admin: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Admin",

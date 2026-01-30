@@ -1,2 +1,5 @@
+# Dependencies (ignores node_modules in root, client, and server)
 node_modules
+
+# Environment variables
 .env

@@ -18,6 +18,7 @@ const globalLimiter = generalLimit;
 
 const whiteList = [
   "http://localhost:5173",
+  "http://localhost:3000",
   "https://byte-cart.vercel.app"
 ]
 
@@ -35,7 +36,12 @@ const corsOption = {
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors(corsOption))
+app.use(cors(corsOption));
+
+app.get("/",(req,res)=>{
+  res.send("Backend up and running")
+})
+
 app.use("/api/auth/v1", authLimiter, authRoutes);
 app.use("/api/admin", authLimiter, adminRoute);
 app.use("/api/coupon", globalLimiter, couponRoutes);

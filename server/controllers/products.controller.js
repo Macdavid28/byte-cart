@@ -101,7 +101,7 @@ export const getProductById = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message || "Internal SErver Error",
+      message: error.message || "Internal Server Error",
     });
   }
 };
