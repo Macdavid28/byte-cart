@@ -3,7 +3,7 @@ import { Category } from "../models/category.model.js";
 import { Product } from "../models/product.model.js";
 
 export const createNewProduct = async (req, res) => {
-  const { name, description, price, category, stock, color, coverImage } =
+  let { name, description, price, category, stock, color, coverImage } =
     req.body;
   try {
     if (
@@ -12,7 +12,7 @@ export const createNewProduct = async (req, res) => {
       price === undefined ||
       stock === undefined ||
       !color ||
-      (!req.file && !coverImage)
+      (!req.files?.coverImage && !coverImage)
     ) {
       return res.status(403).json({
         success: false,
@@ -26,15 +26,15 @@ export const createNewProduct = async (req, res) => {
         .json({ success: false, message: "invalid category" });
     }
     // let finalImageUrl = coverImage;
-    if (req.file) {
-      const imageUpload = await cloudinary.uploader.upload(req.file.path, {
+    if (req.files?.coverImage) {
+      const imageUpload = await cloudinary.uploader.upload(req.files.coverImage[0].path, {
         folder: "bytecart",
       });
       coverImage = imageUpload.secure_url;
     }
     let images = [];
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
+    if (req.files?.images && req.files.images.length > 0) {
+      for (const file of req.files.images) {
         const imagesUpload = await cloudinary.uploader.upload(file.path, {
           folder: "bytecart",
         });
@@ -107,7 +107,7 @@ export const getProductById = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-  const { name, description, price, category, stock, color, coverImage } =
+  let { name, description, price, category, stock, color, coverImage } =
     req.body;
   const { id } = req.params;
   try {
@@ -141,17 +141,17 @@ export const updateProduct = async (req, res) => {
     if (color !== undefined) {
       product.color = color;
     }
-    if (req.file) {
-      const imageUpload = await cloudinary.uploader.upload(req.file.path, {
+    if (req.files?.coverImage) {
+      const imageUpload = await cloudinary.uploader.upload(req.files.coverImage[0].path, {
         folder: "bytecart",
       });
-      coverImage = imageUpload.secure_url;
+      product.coverImage = imageUpload.secure_url;
     } else if (coverImage !== undefined) {
       product.coverImage = coverImage;
     }
     let images = [];
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
+    if (req.files?.images && req.files.images.length > 0) {
+      for (const file of req.files.images) {
         const imagesUpload = await cloudinary.uploader.upload(file.path, {
           folder: "bytecart",
         });

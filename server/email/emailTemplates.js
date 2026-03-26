@@ -134,3 +134,74 @@ export const welcomeEmailTemplate = (name) => `
 </body>
 </html>
 `;
+
+export const orderConfirmationTemplate = (name, orderNumber, total) => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333333; background-color: #f4f4f7; margin: 0; padding: 0;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); overflow: hidden;">
+      <div style="background-color: #2563eb; padding: 20px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: bold;">ByteCart</h1>
+      </div>
+      <div style="padding: 40px 30px; text-align: center;">
+        <div style="background-color: #d1fae5; color: #059669; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; font-size: 30px;">✓</div>
+        <h2 style="margin-top: 0; color: #1f2937; font-size: 20px;">Order Confirmed!</h2>
+        <p style="color: #4b5563; font-size: 16px;">Hi ${name},</p>
+        <p style="color: #4b5563; font-size: 16px;">Your order has been successfully placed and payment received.</p>
+        
+        <div style="background-color: #f3f4f6; border-radius: 6px; padding: 16px; margin: 24px 0;">
+          <p style="margin: 4px 0; color: #4b5563; font-size: 14px;"><strong>Order Number:</strong> ${orderNumber}</p>
+          <p style="margin: 4px 0; color: #4b5563; font-size: 14px;"><strong>Total:</strong> ₦${total.toLocaleString()}</p>
+        </div>
+        
+        <p style="color: #4b5563; font-size: 14px;">We'll send you another email when your order ships.</p>
+      </div>
+      <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+        <p style="margin: 0; color: #9ca3af; font-size: 12px;">&copy; ${new Date().getFullYear()} ByteCart. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+`;
+
+export const shippingUpdateTemplate = (name, orderNumber, trackingNumber) => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Order Has Shipped</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333333; background-color: #f4f4f7; margin: 0; padding: 0;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); overflow: hidden;">
+      <div style="background-color: #0d9488; padding: 20px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: bold;">ByteCart</h1>
+      </div>
+      <div style="padding: 40px 30px;">
+        <h2 style="margin-top: 0; color: #1f2937; font-size: 20px;">Your Order Has Shipped! 📦</h2>
+        <p style="color: #4b5563; font-size: 16px;">Hi ${name},</p>
+        <p style="color: #4b5563; font-size: 16px;">Great news! Your order is on its way.</p>
+        
+        <div style="background-color: #f3f4f6; border-radius: 6px; padding: 16px; margin: 24px 0;">
+          <p style="margin: 4px 0; color: #4b5563; font-size: 14px;"><strong>Order Number:</strong> ${orderNumber}</p>
+          <p style="margin: 4px 0; color: #4b5563; font-size: 14px;"><strong>Tracking Number:</strong> ${trackingNumber}</p>
+        </div>
+        
+        <p style="color: #4b5563; font-size: 14px;">You can use the tracking number above to track your delivery.</p>
+      </div>
+      <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+        <p style="margin: 0; color: #9ca3af; font-size: 12px;">&copy; ${new Date().getFullYear()} ByteCart. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+`;

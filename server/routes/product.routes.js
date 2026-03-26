@@ -15,8 +15,10 @@ productRoutes.post(
   "/create",
   authMiddleware,
   isAdmin,
-  upload.single("coverImage"),
-  upload.array("images"),
+  upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "images", maxCount: 10 },
+  ]),
   createNewProduct
 );
 productRoutes.get("/all", getAllProducts);

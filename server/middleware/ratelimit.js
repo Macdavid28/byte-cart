@@ -5,7 +5,6 @@ export const authLimit = expressRateLimit({
   max: 20,
   legacyHeaders:true,
   standardHeaders:true,
-  keyGenerator:(req)=> req.ip ,
   message: "Too many requests from this IP, please try again after 15 minutes",
 });
 export const generalLimit = expressRateLimit({
@@ -13,6 +12,5 @@ export const generalLimit = expressRateLimit({
   max: 100,
   legacyHeaders:true,
   standardHeaders:true,
-  keyGenerator:(req)=> req.ip ,
   message: "Too many requests from this IP, please try again after 15 minutes",
 });

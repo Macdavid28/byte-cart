@@ -94,7 +94,7 @@ export const signup = async (req, res) => {
       await sendVerificationEmail(
         newUser.name,
         newUser.email,
-        newUser.verificationToken
+        newUser.verificationToken,
       );
 
       return res.status(201).json({
@@ -180,7 +180,7 @@ export const login = async (req, res) => {
     user.isLoggedIn = true;
     await user.save();
     const token = generateJwt(res, user._id);
-    await sendWelcomeEmail(user.email, user.name);
+
     return res.status(200).json({
       success: true,
       message: "User Login Successful",
@@ -254,7 +254,7 @@ export const forgotPassword = async (req, res) => {
     await user.save();
     await sendPasswordResetEmail(
       user.email,
-      `${process.env.CLIENT_LINK}/reset-password/${resetToken}`
+      `${process.env.CLIENT_LINK}/reset-password/${resetToken}`,
     );
     return res.status(200).json({ success: true, message: "Reset Token Sent" });
   } catch (error) {
@@ -362,7 +362,6 @@ export const checkAuth = async (req, res) => {
     res.status(404).json({ success: false, message: "User Not Found" });
   }
 };
-
 
 export const adminLogin = async (req, res) => {
   const { email, password } = req.body;

@@ -178,7 +178,7 @@ if (!usedCoupon) {
       success: true,
       coupon: {
         code: usedCoupon.code,
-        discount: usedCoupon.discount,
+        discount: usedCoupon.discountPercentage,
         type: usedCoupon.type,
       },
     });

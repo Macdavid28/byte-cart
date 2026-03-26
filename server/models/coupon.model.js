@@ -7,7 +7,7 @@ const couponSchema = new mongoose.Schema({
     enum: ["percentage", "fixed", "free_shipping"],
     required: true,
   },
-  value: {
+  discountPercentage: {
     type: Number,
     required: true,
     min: 0,

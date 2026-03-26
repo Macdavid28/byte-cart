@@ -11,6 +11,8 @@ import { couponRoutes } from "./server/routes/coupon.routes.js";
 import { categoryRoutes } from "./server/routes/category.routes.js";
 import { authLimit, generalLimit } from "./server/middleware/ratelimit.js";
 import { cartRoutes } from "./server/routes/cart.routes.js";
+import { orderRoutes } from "./server/routes/order.routes.js";
+import { reviewRoutes } from "./server/routes/review.routes.js";
 dotenv.config();
 const app = express();
 const authLimiter = authLimit;
@@ -24,7 +26,7 @@ const whiteList = [
 
 const corsOption = {
   origin : (origin,callback)=>{
-    if (!origin || !whiteList.includes(origin)){
+    if (!origin || whiteList.includes(origin)){
       callback(null,true)
     }
     else{
@@ -48,6 +50,8 @@ app.use("/api/coupon", globalLimiter, couponRoutes);
 app.use("/api/category", globalLimiter, categoryRoutes);
 app.use("/api/products", globalLimiter, productRoutes);
 app.use("/api/cart", globalLimiter, cartRoutes);
+app.use("/api/orders", globalLimiter, orderRoutes);
+app.use("/api/reviews", globalLimiter, reviewRoutes);
 app.use("/api/users", globalLimiter, userRoutes);
 const PORT = process.env.SERVER_PORT || 5000;
 app.listen(PORT, () => {

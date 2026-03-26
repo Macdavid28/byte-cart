@@ -18,7 +18,7 @@ export const verifyToken = (req, res, next) => {
         .status(401)
         .json({ success: false, message: "Unauthorized - Invalid" });
     }
-    // set the decoded userI to the request id sent to the server
+    // set the decoded userId to the request id sent to the server
     req.userId = decoded.userId;
     next();
   } catch (error) {

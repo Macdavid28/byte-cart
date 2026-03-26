@@ -4,6 +4,8 @@ import {
   resetPasswordTemplate,
   resetSuccessTemplate,
   welcomeEmailTemplate,
+  orderConfirmationTemplate,
+  shippingUpdateTemplate,
 } from "./emailTemplates.js";
 
 // Send verification email
@@ -74,6 +76,42 @@ export const sendResetSuccessEmail = async (email) => {
     console.log("Password reset success email sent:", data);
   } catch (err) {
     console.error("Reset success email error:", err);
+    throw err;
+  }
+};
+
+// Send order confirmation email
+export const sendOrderConfirmationEmail = async (email, name, orderNumber, total) => {
+  try {
+    const emailData = {
+      subject: `Order Confirmed - ${orderNumber}`,
+      htmlContent: orderConfirmationTemplate(name, orderNumber, total),
+      sender: sender,
+      to: [{ email: email }],
+    };
+
+    const data = await transactionalEmailsApi.sendTransacEmail(emailData);
+    console.log("Order confirmation email sent:", data);
+  } catch (err) {
+    console.error("Order confirmation email error:", err);
+    throw err;
+  }
+};
+
+// Send shipping update email
+export const sendShippingUpdateEmail = async (email, name, orderNumber, trackingNumber) => {
+  try {
+    const emailData = {
+      subject: `Your Order ${orderNumber} Has Shipped!`,
+      htmlContent: shippingUpdateTemplate(name, orderNumber, trackingNumber),
+      sender: sender,
+      to: [{ email: email }],
+    };
+
+    const data = await transactionalEmailsApi.sendTransacEmail(emailData);
+    console.log("Shipping update email sent:", data);
+  } catch (err) {
+    console.error("Shipping update email error:", err);
     throw err;
   }
 };
