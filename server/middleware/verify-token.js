@@ -18,13 +18,18 @@ export const verifyToken = (req, res, next) => {
         .status(401)
         .json({ success: false, message: "Unauthorized - Invalid" });
     }
-    // set the decoded userId to the request id sent to the server
+    // set the decoded userId and adminId to the request
     req.userId = decoded.userId;
+    req.adminId = decoded.adminId;
     next();
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Internal Server Error",
-    });
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ success: false, message: "Token expired", expired: true });
+    }
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized - Invalid token" });
   }
 };

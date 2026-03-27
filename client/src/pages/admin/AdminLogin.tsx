@@ -36,7 +36,7 @@ const AdminLogin = () => {
         password: data.password,
       });
       if (res.data.success) {
-        setAdmin(res.data.admin, res.data.admin.token);
+        setAdmin(res.data.admin);
         toast.success("Admin login successful!");
         navigate("/admin");
       }

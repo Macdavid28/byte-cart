@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "../stores/authStore";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -10,25 +11,26 @@ const api = axios.create({
   },
 });
 
-// Request interceptor — attach Bearer token from localStorage if present
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
-
 // Response interceptor — handle 401 globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("token");
-      // Optionally redirect to login — handled by auth store
+      const { isAuthenticated, isAdmin } = useAuthStore.getState();
+      // Only auto-logout if user was previously authenticated
+      // to avoid redirect loops on login pages
+      if (isAuthenticated) {
+        if (isAdmin) {
+          useAuthStore.getState().adminLogout();
+        } else {
+          useAuthStore.getState().logout();
+        }
+        // Redirect to appropriate login page
+        const loginPath = isAdmin ? "/admin/login" : "/login";
+        if (window.location.pathname !== loginPath) {
+          window.location.href = loginPath;
+        }
+      }
     }
     return Promise.reject(error);
   },

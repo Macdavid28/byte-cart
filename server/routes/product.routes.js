@@ -2,6 +2,7 @@ import express from "express";
 import { upload } from "../config/multer.js";
 import {
   createNewProduct,
+  deleteProduct,
   getAllProducts,
   getProductById,
   updateProduct,
@@ -27,6 +28,15 @@ productRoutes.put(
   "/update/:id",
   authMiddleware,
   isAdmin,
-  upload.single("coverImage"),
+  upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "images", maxCount: 10 },
+  ]),
   updateProduct
+);
+productRoutes.delete(
+  "/delete/:id",
+  authMiddleware,
+  isAdmin,
+  deleteProduct
 );

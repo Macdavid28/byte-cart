@@ -5,35 +5,32 @@ import type { User, Admin } from "../types";
 interface AuthState {
   user: User | null;
   admin: Admin | null;
-  token: string | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
   isLoading: boolean;
 
   // Actions
-  setUser: (user: User, token: string) => void;
-  setAdmin: (admin: Admin, token: string) => void;
+  setUser: (user: User) => void;
+  setAdmin: (admin: Admin) => void;
   logout: () => void;
   adminLogout: () => void;
   checkAuth: () => Promise<void>;
+  checkAdminAuth: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   admin: null,
-  token: localStorage.getItem("token"),
   isAuthenticated: false,
   isAdmin: false,
   isLoading: true,
 
-  setUser: (user, token) => {
-    localStorage.setItem("token", token);
-    set({ user, token, isAuthenticated: true, isAdmin: false, isLoading: false });
+  setUser: (user) => {
+    set({ user, isAuthenticated: true, isAdmin: false, isLoading: false });
   },
 
-  setAdmin: (admin, token) => {
-    localStorage.setItem("token", token);
-    set({ admin, token, isAuthenticated: true, isAdmin: true, isLoading: false });
+  setAdmin: (admin) => {
+    set({ admin, isAuthenticated: true, isAdmin: true, isLoading: false });
   },
 
   logout: async () => {
@@ -42,8 +39,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch {
       // ignore errors on logout
     }
-    localStorage.removeItem("token");
-    set({ user: null, admin: null, token: null, isAuthenticated: false, isAdmin: false, isLoading: false });
+    set({
+      user: null,
+      admin: null,
+      isAuthenticated: false,
+      isAdmin: false,
+      isLoading: false,
+    });
   },
 
   adminLogout: async () => {
@@ -52,18 +54,18 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch {
       // ignore errors on logout
     }
-    localStorage.removeItem("token");
-    set({ user: null, admin: null, token: null, isAuthenticated: false, isAdmin: false, isLoading: false });
+    set({
+      user: null,
+      admin: null,
+      isAuthenticated: false,
+      isAdmin: false,
+      isLoading: false,
+    });
   },
 
   checkAuth: async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      set({ isLoading: false });
-      return;
-    }
     try {
-      const res = await api.get("/auth/v1/check-auth");
+      const res = await api.get("/auth/v1/me");
       if (res.data.success && res.data.user) {
         set({
           user: res.data.user,
@@ -71,10 +73,41 @@ export const useAuthStore = create<AuthState>((set) => ({
           isAdmin: false,
           isLoading: false,
         });
+        return;
       }
     } catch {
-      localStorage.removeItem("token");
-      set({ user: null, admin: null, token: null, isAuthenticated: false, isAdmin: false, isLoading: false });
+      // Cookie is invalid/expired — clear state silently
     }
+    set({
+      user: null,
+      admin: null,
+      isAuthenticated: false,
+      isAdmin: false,
+      isLoading: false,
+    });
+  },
+
+  checkAdminAuth: async () => {
+    try {
+      const res = await api.get("/auth/v1/admin/me");
+      if (res.data.success && res.data.admin) {
+        set({
+          admin: res.data.admin,
+          isAuthenticated: true,
+          isAdmin: true,
+          isLoading: false,
+        });
+        return;
+      }
+    } catch {
+      // Cookie is invalid/expired — clear state silently
+    }
+    set({
+      user: null,
+      admin: null,
+      isAuthenticated: false,
+      isAdmin: false,
+      isLoading: false,
+    });
   },
 }));

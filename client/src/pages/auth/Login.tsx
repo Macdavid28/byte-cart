@@ -38,7 +38,7 @@ const Login = () => {
       };
       const res = await api.post("/auth/v1/login", payload);
       if (res.data.success) {
-        setUser(res.data.user, res.data.user.token);
+        setUser(res.data.user);
         toast.success("Login successful!");
         navigate("/");
       }

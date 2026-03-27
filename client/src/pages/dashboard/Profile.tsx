@@ -19,7 +19,6 @@ const Profile = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const user = useAuthStore((s) => s.user);
   const setUser = useAuthStore((s) => s.setUser);
-  const token = useAuthStore((s) => s.token);
   const toast = useToast();
 
   const {
@@ -40,7 +39,7 @@ const Profile = () => {
     try {
       const res = await api.put("/users/user/update/profile", data);
       if (res.data.success) {
-        setUser(res.data.user, token || "");
+        setUser(res.data.user);
         toast.success("Profile updated!");
       }
     } catch (error: unknown) {

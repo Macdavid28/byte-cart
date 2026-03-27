@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/navbar";
 import Footer from "./components/footer";
 import ToastContainer from "./components/Toast";
+import ScrollToTop from "./components/ScrollToTop";
+import { useAuthStore } from "./stores/authStore";
 
 // Public pages
 import Home from "./pages/home/Home";
@@ -41,6 +44,23 @@ import AdminUsers from "./pages/admin/AdminUsers";
 // Guards
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+
+// Restore auth session on app load
+const AuthInitializer = () => {
+  const checkAuth = useAuthStore((s) => s.checkAuth);
+  const checkAdminAuth = useAuthStore((s) => s.checkAdminAuth);
+
+  useEffect(() => {
+    // Determine which auth check to run based on current path
+    if (window.location.pathname.startsWith("/admin") && window.location.pathname !== "/admin/login") {
+      checkAdminAuth();
+    } else {
+      checkAuth();
+    }
+  }, [checkAuth, checkAdminAuth]);
+
+  return null;
+};
 
 // Layout wrapper for public/user routes (with Navbar + Footer)
 const MainLayout = () => (
@@ -86,6 +106,8 @@ const MainLayout = () => (
 function App() {
   return (
     <BrowserRouter>
+      <AuthInitializer />
+      <ScrollToTop />
       <ToastContainer />
       <Routes>
         {/* Admin Routes — no Navbar/Footer */}

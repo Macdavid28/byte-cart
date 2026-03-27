@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 import { Admin } from "./../models/admin.model.js";
-import { generateJwt } from "./../utils/cookies.js";
+import { generateJwt, clearAuthCookie } from "./../utils/cookies.js";
 import {
   sendPasswordResetEmail,
   sendResetSuccessEmail,
@@ -171,11 +171,11 @@ export const login = async (req, res) => {
     // Compare if password matches
     const comparePassword = await bcryptjs.compare(password, user.password);
     if (!comparePassword) {
-      res.status(401).json({ success: false, message: "Invalid Credentials" });
+      return res.status(401).json({ success: false, message: "Invalid Credentials" });
     }
     const verificationStatus = user.isVerified;
     if (!verificationStatus) {
-      res.status(403).json({ success: false, message: "User not verified" });
+      return res.status(403).json({ success: false, message: "User not verified" });
     }
     user.isLoggedIn = true;
     await user.save();
@@ -338,8 +338,8 @@ export const resetPassword = async (req, res) => {
 // logout
 export const logout = async (req, res) => {
   try {
-    // clear the jwt token session
-    res.clearCookie("token");
+    // clear the jwt token session with matching cookie options
+    clearAuthCookie(res);
     res.status(200).json({ success: true, message: "User Logged Out" });
   } catch (error) {
     return res.status(500).json({
@@ -402,5 +402,19 @@ export const adminLogin = async (req, res) => {
       success: false,
       message: error.message || "Internal Server Error",
     });
+  }
+};
+
+export const checkAdminAuth = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.adminId);
+    if (!admin) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Admin Not Found" });
+    }
+    res.status(200).json({ success: true, admin: { ...admin._doc, password: undefined } });
+  } catch (error) {
+    res.status(401).json({ success: false, message: "Invalid session" });
   }
 };

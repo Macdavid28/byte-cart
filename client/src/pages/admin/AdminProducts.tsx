@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Pencil, X, Upload } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, X, Upload } from "lucide-react";
 import api from "../../api/axios";
 import type { Product, Category } from "../../types";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -12,6 +12,9 @@ const AdminProducts = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDeleteProduct, setConfirmDeleteProduct] = useState<Product | null>(null);
+  const [viewProduct, setViewProduct] = useState<Product | null>(null);
   const toast = useToast();
 
   // Form state
@@ -96,6 +99,25 @@ const AdminProducts = () => {
       toast.error(err.response?.data?.message || "Operation failed");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirmDeleteProduct) return;
+    setDeletingId(confirmDeleteProduct._id);
+    // Optimistic removal
+    setProducts((prev) => prev.filter((p) => p._id !== confirmDeleteProduct._id));
+    setConfirmDeleteProduct(null);
+    try {
+      await api.delete(`/products/delete/${confirmDeleteProduct._id}`);
+      toast.success("Product deleted!");
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Delete failed");
+      // Revert optimistic removal on failure
+      fetchData();
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -219,6 +241,109 @@ const AdminProducts = () => {
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
+      {confirmDeleteProduct && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl w-full max-w-sm p-6 text-center">
+            <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+              <Trash2 className="h-7 w-7 text-red-600" />
+            </div>
+            <h3 className="font-secondary font-bold text-lg text-slate-900 mb-2">Delete Product</h3>
+            <p className="text-slate-500 text-sm mb-6">
+              Are you sure you want to delete <strong className="text-slate-700">"{confirmDeleteProduct.name}"</strong>?
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDeleteProduct(null)}
+                className="flex-1 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="flex-1 px-4 py-2.5 rounded-lg bg-red-600 text-white font-medium text-sm hover:bg-red-700 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Product Details Modal */}
+      {viewProduct && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-secondary font-bold text-lg">Product Details</h3>
+              <button onClick={() => setViewProduct(null)} className="text-slate-400 hover:text-slate-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Cover Image */}
+            <img
+              src={viewProduct.coverImage}
+              alt={viewProduct.name}
+              className="w-full h-56 object-cover rounded-lg bg-slate-100 mb-4"
+            />
+
+            {/* Additional Images */}
+            {viewProduct.images && viewProduct.images.length > 0 && (
+              <div className="flex gap-2 mb-4 overflow-x-auto">
+                {viewProduct.images.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`${viewProduct.name} ${idx + 1}`}
+                    className="w-20 h-20 rounded-lg object-cover bg-slate-100 flex-shrink-0"
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Product Info */}
+            <div className="space-y-3">
+              <div>
+                <h4 className="font-semibold text-slate-900 text-lg">{viewProduct.name}</h4>
+                <p className="text-slate-500 text-sm mt-1">{viewProduct.description}</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
+                <div>
+                  <span className="text-xs text-slate-400 uppercase tracking-wide">Price</span>
+                  <p className="font-bold text-slate-900 text-lg">₦{viewProduct.price.toLocaleString()}</p>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 uppercase tracking-wide">Stock</span>
+                  <p className={`font-bold text-lg ${viewProduct.stock <= 5 ? "text-red-600" : "text-slate-900"}`}>
+                    {viewProduct.stock}
+                  </p>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 uppercase tracking-wide">Color</span>
+                  <p className="font-medium text-slate-700 capitalize">{viewProduct.color}</p>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 uppercase tracking-wide">Category</span>
+                  <p className="font-medium text-slate-700">
+                    {typeof viewProduct.category === "object" && viewProduct.category !== null
+                      ? viewProduct.category.name
+                      : viewProduct.category || "N/A"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex justify-between text-xs text-slate-400">
+                <span>Created: {new Date(viewProduct.createdAt).toLocaleDateString()}</span>
+                <span>Updated: {new Date(viewProduct.updatedAt).toLocaleDateString()}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Products Table */}
       <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
         <div className="overflow-x-auto">
@@ -255,12 +380,33 @@ const AdminProducts = () => {
                   </td>
                   <td className="px-5 py-4 capitalize text-slate-600">{product.color}</td>
                   <td className="px-5 py-4 text-right">
-                    <button
-                      onClick={() => openEdit(product)}
-                      className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        id={`view-product-${product._id}`}
+                        onClick={() => setViewProduct(product)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        title="View details"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </button>
+                      <button
+                        id={`edit-product-${product._id}`}
+                        onClick={() => openEdit(product)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"
+                        title="Edit product"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        id={`delete-product-${product._id}`}
+                        onClick={() => setConfirmDeleteProduct(product)}
+                        disabled={deletingId === product._id}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        title="Delete product"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
