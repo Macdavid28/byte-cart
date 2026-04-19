@@ -18,7 +18,7 @@ ByteCart is a professional, full-stack e-commerce platform designed for a seamle
 - **Database:** MongoDB (via Mongoose)
 - **Authentication:** JWT (JSON Web Tokens) & bcryptjs
 - **File Uploads:** Multer & Cloudinary
-- **Email Service:** Brevo / Resend
+- **Email Service:** Brevo
 - **Security:** Express Rate Limit, Cookie Parser
 
 ---
