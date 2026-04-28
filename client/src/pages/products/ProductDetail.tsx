@@ -21,6 +21,7 @@ const ProductDetail = () => {
 
   const addToCart = useCartStore((s) => s.addToCart);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isAdmin = useAuthStore((s) => s.isAdmin);
   const toast = useToast();
 
   useEffect(() => {
@@ -62,6 +63,10 @@ const ProductDetail = () => {
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
       toast.warning("Please login to add items to cart");
+      return;
+    }
+    if (isAdmin) {
+      toast.warning("Admins cannot add items to cart. Please log in as a user.");
       return;
     }
     if (!product) return;

@@ -27,6 +27,7 @@ const AdminProducts = () => {
     color: "",
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const fetchData = async () => {
     try {
@@ -51,6 +52,7 @@ const AdminProducts = () => {
     setEditingProduct(null);
     setFormData({ name: "", description: "", price: "", category: "", stock: "", color: "" });
     setImageFile(null);
+    setImageFiles([]);
     setShowForm(true);
   };
 
@@ -65,6 +67,7 @@ const AdminProducts = () => {
       color: product.color,
     });
     setImageFile(null);
+    setImageFiles([]);
     setShowForm(true);
   };
 
@@ -80,6 +83,9 @@ const AdminProducts = () => {
       fd.append("stock", formData.stock);
       fd.append("color", formData.color);
       if (imageFile) fd.append("coverImage", imageFile);
+      if (imageFiles.length > 0) {
+        imageFiles.forEach((file) => fd.append("images", file));
+      }
 
       if (editingProduct) {
         await api.put(`/products/update/${editingProduct._id}`, fd, {
@@ -214,20 +220,49 @@ const AdminProducts = () => {
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Cover Image</label>
-                <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-dashed border-slate-300 cursor-pointer hover:border-blue-400 transition-colors">
-                  <Upload className="h-4 w-4 text-slate-400" />
-                  <span className="text-sm text-slate-500">
-                    {imageFile ? imageFile.name : "Choose file..."}
-                  </span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                    className="hidden"
-                  />
-                </label>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1">
+                    Cover Image <span className="text-red-500">*</span>
+                  </label>
+                  <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-dashed border-slate-300 cursor-pointer hover:border-blue-400 transition-colors">
+                    <Upload className="h-4 w-4 text-slate-400" />
+                    <span className="text-sm text-slate-500 truncate max-w-[150px]">
+                      {imageFile ? imageFile.name : "Choose file..."}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      required={!editingProduct} // Strict required only on creation
+                      onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1">
+                    Extra Images <span className="text-slate-400 font-normal">(Optional)</span>
+                  </label>
+                  <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-dashed border-slate-300 cursor-pointer hover:border-blue-400 transition-colors">
+                    <Upload className="h-4 w-4 text-slate-400" />
+                    <span className="text-sm text-slate-500 truncate max-w-[150px]">
+                      {imageFiles.length > 0
+                        ? `${imageFiles.length} file(s) selected`
+                        : "Choose files..."}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          setImageFiles(Array.from(e.target.files));
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
               </div>
               <button
                 type="submit"
@@ -297,7 +332,7 @@ const AdminProducts = () => {
                     key={idx}
                     src={img}
                     alt={`${viewProduct.name} ${idx + 1}`}
-                    className="w-20 h-20 rounded-lg object-cover bg-slate-100 flex-shrink-0"
+                    className="w-20 h-20 rounded-lg object-cover bg-slate-100 shrink-0"
                   />
                 ))}
               </div>

@@ -58,86 +58,202 @@ export const getProfile = async (req, res) => {
 };
 
 // update profile details
+// export const updateMyProfile = async (req, res) => {
+//   const { name, username, email, password, displayPicture } = req.body;
+//   const userId = req.userId;
+//   try {
+//     // Find user by ID and exclude sensitive tokens
+//     const user = await User.findById(userId).select(
+//       "-verificationToken -verificationTokenExpiresAt -resetPasswordToken -resetPasswordTokenExpiresAt",
+//     );
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "User not found" });
+//     }
+//     // Username check (only if provided)
+//     if (username && username !== user.username) {
+//       const takenUsername = await User.findOne({
+//         username,
+//         _id: { $ne: userId },
+//       });
+//       if (takenUsername) {
+//         return res
+//           .status(409)
+//           .json({ success: false, message: "This username is already taken" });
+//       }
+//       user.username = username.trim();
+//     }
+//     if (password.length < 8) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Password must be at least 8 characters long",
+//       });
+//     }
+//     if (!/\d/.test(password)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Password must contain at least one number.",
+//       });
+//     }
+
+//     // Check for special character
+//     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Password must contain at least one special character.",
+//       });
+//     }
+
+//     // Check for uppercase and lowercase
+//     if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Password must include uppercase and lowercase letters.",
+//       });
+//     }
+//     const emailInUse = await User.findOne({ email, _id: { $ne: userId } });
+//     if (emailInUse) {
+//       return res.status(409).json({
+//         success: false,
+//         message: "Email In Use",
+//       });
+//     }
+//     // Update fields manually
+//     if (name !== undefined) user.name = name;
+//     if (username !== undefined) user.username = username;
+//     if (email !== undefined) user.email = email;
+//     if (password !== undefined) {
+//       user.password = await bcryptjs.hash(password, 10);
+//     }
+
+//     // Handle display picture upload or direct URL
+//     if (req.file) {
+//       const userImageUpload = await cloudinary.uploader.upload(req.file.path, {
+//         folder: "byte-cart-users",
+//       });
+//       user.displayPicture = userImageUpload.secure_url;
+//     } else if (displayPicture) {
+//       user.displayPicture = displayPicture;
+//     }
+//     // Save changes
+//     await user.save();
+//     return res.status(200).json({ success: true, details: user });
+//   } catch (error) {
+//     return res.status(500).json({ success: false, message: error.message });
+//   }
+// };
 export const updateMyProfile = async (req, res) => {
   const { name, username, email, password, displayPicture } = req.body;
   const userId = req.userId;
+
   try {
-    // Find user by ID and exclude sensitive tokens
     const user = await User.findById(userId).select(
-      "-verificationToken -verificationTokenExpiresAt -resetPasswordToken -resetPasswordTokenExpiresAt"
+      "-verificationToken -verificationTokenExpiresAt -resetPasswordToken -resetPasswordTokenExpiresAt",
     );
+
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-
-    const takenUsername = await User.findOne({ username });
-    if (takenUsername) {
-      return res
-        .status(409)
-        .json({ success: false, message: "This username is already taken" });
-    }
-    if (password.length < 8) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
-        message: "Password must be at least 8 characters long",
-      });
-    }
-    if (!/\d/.test(password)) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must contain at least one number.",
+        message: "User not found",
       });
     }
 
-    // Check for special character
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must contain at least one special character.",
+    // ✅ Username check (only if provided)
+    if (username && username !== user.username) {
+      const takenUsername = await User.findOne({
+        username,
+        _id: { $ne: userId },
       });
+
+      if (takenUsername) {
+        return res.status(409).json({
+          success: false,
+          message: "This username is already taken",
+        });
+      }
+
+      user.username = username.trim();
     }
 
-    // Check for uppercase and lowercase
-    if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must include uppercase and lowercase letters.",
+    // ✅ Email check (only if provided)
+    if (email && email !== user.email) {
+      const emailInUse = await User.findOne({
+        email,
+        _id: { $ne: userId },
       });
+
+      if (emailInUse) {
+        return res.status(409).json({
+          success: false,
+          message: "Email already in use",
+        });
+      }
+
+      user.email = email.trim();
     }
-    const emailInUse = await User.findOne({ email, _id: { $ne: userId } });
-    if (emailInUse) {
-      return res.status(409).json({
-        success: false,
-        message: "Email In Use",
-      });
+
+    // ✅ Name update
+    if (name) {
+      user.name = name.trim();
     }
-    // Update fields manually
-    if (name !== undefined) user.name = name;
-    if (username !== undefined) user.username = username;
-    if (email !== undefined) user.email = email;
-    if (password !== undefined) {
+
+    // ✅ Password validation (only if provided)
+    if (password) {
+      if (password.length < 8) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must be at least 8 characters long",
+        });
+      }
+
+      if (!/\d/.test(password)) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must contain at least one number",
+        });
+      }
+
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must contain at least one special character",
+        });
+      }
+
+      if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must include uppercase and lowercase letters",
+        });
+      }
+
       user.password = await bcryptjs.hash(password, 10);
     }
 
-    // Handle display picture upload or direct URL
+    // ✅ Profile picture handling
     if (req.file) {
-      const userImageUpload = await cloudinary.uploader.upload(req.file.path, {
+      const upload = await cloudinary.uploader.upload(req.file.path, {
         folder: "byte-cart-users",
       });
-      user.displayPicture = userImageUpload.secure_url;
+      user.displayPicture = upload.secure_url;
     } else if (displayPicture) {
       user.displayPicture = displayPicture;
     }
-    // Save changes
+
     await user.save();
-    return res.status(200).json({ success: true, details: user });
+
+    return res.status(200).json({
+      success: true,
+      details: user,
+    });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
-
 export const deleteProfile = async (req, res) => {
   const userId = req.userId;
   try {

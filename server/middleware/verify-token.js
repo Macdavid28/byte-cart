@@ -21,6 +21,7 @@ export const verifyToken = (req, res, next) => {
     // set the decoded userId and adminId to the request
     req.userId = decoded.userId;
     req.adminId = decoded.adminId;
+    req.role = decoded.role;
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {

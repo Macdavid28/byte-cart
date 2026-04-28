@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Upload } from "lucide-react";
 import api from "../../api/axios";
 import type { Category } from "../../types";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -11,6 +11,7 @@ const AdminCategories = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [name, setName] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const toast = useToast();
 
@@ -32,15 +33,24 @@ const AdminCategories = () => {
     if (!name.trim()) return;
     setSubmitting(true);
     try {
+      const fd = new FormData();
+      fd.append("name", name);
+      if (imageFile) fd.append("coverImage", imageFile);
+
       if (editingCategory) {
-        await api.put(`/category/${editingCategory._id}`, { name });
+        await api.put(`/category/${editingCategory._id}`, fd, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         toast.success("Category updated!");
       } else {
-        await api.post("/category/create", { name });
+        await api.post("/category/create", fd, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         toast.success("Category created!");
       }
       setShowForm(false);
       setName("");
+      setImageFile(null);
       setEditingCategory(null);
       fetchCategories();
     } catch (error: unknown) {
@@ -72,6 +82,7 @@ const AdminCategories = () => {
           onClick={() => {
             setEditingCategory(null);
             setName("");
+            setImageFile(null);
             setShowForm(true);
           }}
           className="btn-primary text-sm"
@@ -103,6 +114,24 @@ const AdminCategories = () => {
                   placeholder="Category name"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                  Cover Image {editingCategory ? "" : <span className="text-red-500">*</span>}
+                </label>
+                <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-dashed border-slate-300 cursor-pointer hover:border-blue-400 transition-colors">
+                  <Upload className="h-4 w-4 text-slate-400" />
+                  <span className="text-sm text-slate-500 truncate max-w-[200px]">
+                    {imageFile ? imageFile.name : "Choose file..."}
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    required={!editingCategory} // Only required on create unless they want to replace it
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                    className="hidden"
+                  />
+                </label>
+              </div>
               <button type="submit" disabled={submitting} className="w-full btn-primary py-3 disabled:opacity-50">
                 {submitting ? "Saving..." : editingCategory ? "Update" : "Create"}
               </button>
@@ -116,6 +145,7 @@ const AdminCategories = () => {
         <table className="w-full text-sm">
           <thead className="bg-slate-50 border-b border-slate-100">
             <tr>
+              <th className="text-left px-5 py-3 font-semibold text-slate-600 w-16">Image</th>
               <th className="text-left px-5 py-3 font-semibold text-slate-600">Name</th>
               <th className="text-right px-5 py-3 font-semibold text-slate-600">Actions</th>
             </tr>
@@ -123,20 +153,28 @@ const AdminCategories = () => {
           <tbody className="divide-y divide-slate-100">
             {categories.map((cat) => (
               <tr key={cat._id} className="hover:bg-slate-50 transition-colors">
+                <td className="px-5 py-4">
+                  <img
+                    src={cat.coverImage}
+                    alt={cat.name}
+                    className="w-10 h-10 rounded-lg object-cover bg-slate-100"
+                  />
+                </td>
                 <td className="px-5 py-4 font-medium text-slate-900 capitalize">{cat.name}</td>
                 <td className="px-5 py-4 text-right flex items-center justify-end gap-2">
                   <button
                     onClick={() => {
                       setEditingCategory(cat);
                       setName(cat.name);
+                      setImageFile(null);
                       setShowForm(true);
                     }}
                     className="text-blue-600 hover:text-blue-700"
                   >
-                    <Pencil className="h-4 w-4" />
+                    <Pencil className="h-4 w-4 cursor-pointer" />
                   </button>
                   <button onClick={() => handleDelete(cat._id)} className="text-red-500 hover:text-red-600">
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4 cursor-pointer" />
                   </button>
                 </td>
               </tr>

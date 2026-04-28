@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { User, Package, Settings } from "lucide-react";
+import { User, Package } from "lucide-react";
 import { useAuthStore } from "../../stores/authStore";
 
 const tabs = [

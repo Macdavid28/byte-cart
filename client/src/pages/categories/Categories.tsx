@@ -65,14 +65,24 @@ const Categories = () => {
                 to={`/products?category=${category._id}`}
                 className="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                {/* Gradient Background */}
-                <div
-                  className={`h-48 bg-gradient-to-br ${categoryGradients[index % categoryGradients.length]} flex items-center justify-center`}
-                >
-                  <span className="text-6xl font-bold text-white/20 uppercase select-none group-hover:scale-110 transition-transform duration-300">
-                    {category.name.charAt(0)}
-                  </span>
-                </div>
+                {category.coverImage ? (
+                  <div className="h-48 overflow-hidden bg-slate-100 flex items-center justify-center relative">
+                    <img
+                      src={category.coverImage}
+                      alt={category.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
+                  </div>
+                ) : (
+                  <div
+                    className={`h-48 bg-gradient-to-br ${categoryGradients[index % categoryGradients.length]} flex items-center justify-center`}
+                  >
+                    <span className="text-6xl font-bold text-white/20 uppercase select-none group-hover:scale-110 transition-transform duration-300">
+                      {category.name.charAt(0)}
+                    </span>
+                  </div>
+                )}
 
                 {/* Content */}
                 <div className="bg-white p-5 text-center">

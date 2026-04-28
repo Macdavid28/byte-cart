@@ -390,7 +390,7 @@ export const adminLogin = async (req, res) => {
       });
     }
 
-    const token = generateJwt(res, null, admin._id);
+    const token = generateJwt(res, null, admin._id, admin.role);
     return res.status(200).json({
       success: true,
       message: "Admin Login Successful",

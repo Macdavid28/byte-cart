@@ -40,6 +40,7 @@ export interface Product {
 export interface Category {
   _id: string;
   name: string;
+  coverImage: string;
   createdAt?: string;
   updatedAt?: string;
 }

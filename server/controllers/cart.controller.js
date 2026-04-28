@@ -16,6 +16,13 @@ export const createCart = async (req, res) => {
         message: "Product not found",
       });
     }
+    if (!userID) {
+      return res.status(403).json({
+        success: false,
+        message: "Admins cannot create a cart. Please log in as a user.",
+      });
+    }
+
     const user = await User.findById(userID);
     if (!user) {
       return res.status(404).json({

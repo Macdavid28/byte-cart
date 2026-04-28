@@ -21,6 +21,7 @@ export const authMiddleware = (req, res, next) => {
     }
     req.adminId = decoded.adminId;
     req.userId = decoded.userId;
+    req.role = decoded.role;
     next();
   } catch (err) {
     if (err.name === "TokenExpiredError") {
