@@ -1,5 +1,8 @@
 # Dependencies (ignores node_modules in root, client, and server)
-node_modules
-
+/server/node_modules
+/client/node_modules
+.vscode/
 # Environment variables
-.env
+/server/.env
+backend_engineering_audit.md
+test_mongoose.mjs

@@ -8,7 +8,7 @@ ByteCart is a professional, full-stack e-commerce platform designed for a seamle
 
 - **Framework:** React 19
 - **Build Tool:** Vite
-- **Styling:** Vanilla CSS (Modern, Responsive)
+- **Styling:** Tailwind CSS (Modern, Responsive)
 - **State Management:** Hooks & Context API
 
 ### Backend
