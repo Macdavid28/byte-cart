@@ -41,7 +41,7 @@ const Category = () => {
   const displayCategories: Categories[] = categories.length > 0
     ? categories.map((cat) => ({
         name: cat.name,
-        image: categoryImages[cat.name.toLowerCase()] || defaultImage,
+        image: cat.coverImage || categoryImages[cat.name.toLowerCase()] || defaultImage,
       }))
     : [
         { name: "laptops", image: categoryImages.laptops },
@@ -51,28 +51,31 @@ const Category = () => {
       ];
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-slate-50/50 py-20 lg:py-28 border-y border-slate-100">
       <div className="container mx-auto px-6 md:px-12">
-        <div className="mb-12 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
-          <div className="space-y-2">
-            <h2 className="heading text-3xl md:text-4xl">
+        <div className="mb-16 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-1.5 rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-blue-600">
+              Collections
+            </div>
+            <h2 className="heading text-3xl md:text-4xl font-extrabold tracking-tight">
               Featured Categories
             </h2>
-            <p className="text-body max-w-md">
-              Browse by category to find exactly what you're looking for.
+            <p className="text-body text-slate-500 max-w-md">
+              Browse our high-performance categories to find the perfect gear for your setup.
             </p>
           </div>
 
           <Link
             to="/categories"
-            className="group flex items-center gap-2 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
+            className="group inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm border border-slate-200 transition-all hover:bg-slate-50 hover:text-blue-600 hover:border-slate-300"
           >
-            View All
+            View All Categories
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {displayCategories.map((categoryItem, index) => (
             <CategoryCard
               key={index}

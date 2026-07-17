@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node --watch index.js",
-    "admin": "node server/seed/create-admin.seed.js"
+    "admin": "node seed/create-admin.seed.js",
+    "seed:products": "node seed/products.seed.js"
   },
   "keywords": [],
   "author": "mac",

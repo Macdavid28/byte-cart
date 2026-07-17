@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ByteCart - Gadget Landing Page Design Lab</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Global Styles for the Showcase Shell */
+    :root {
+      --sidebar-width: 320px;
+      --color-shell-bg: #0f172a;
+      --color-shell-sidebar: #1e293b;
+      --color-shell-text: #f8fafc;
+      --color-shell-border: #334155;
+      --color-shell-accent: #3b82f6;
+      --color-shell-hover: #475569;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-shell-bg);
+      color: var(--color-shell-text);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--color-shell-sidebar);
+      border-right: 1px solid var(--color-shell-border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+    
+    .sidebar-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--color-shell-border);
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    .design-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .design-item {
+      padding: 12px 16px;
+      border-radius: 8px;
+      background-color: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .design-item:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: var(--color-shell-border);
+    }
+
+    .design-item.active {
+      background-color: var(--color-shell-accent);
+      color: white;
+    }
+
+    .design-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .design-desc {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    .design-item.active .design-desc {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .design-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-minimal { background-color: #f1f5f9; color: #334155; }
+    .badge-cyber { background-color: #06b6d4; color: #083344; }
+    .badge-glass { background-color: #c084fc; color: #3b0764; }
+    .badge-bento { background-color: #eab308; color: #422006; }
+    .badge-split { background-color: #f43f5e; color: #4c0519; }
+    .badge-story { background-color: #10b981; color: #022c22; }
+    .badge-compare { background-color: #6366f1; color: #1e1b4b; }
+    .badge-media { background-color: #3b82f6; color: #172554; }
+    .badge-bold { background-color: #f97316; color: #431407; }
+    .badge-trust { background-color: #64748b; color: #0f172a; }
+
+    /* Preview Container */
+    .preview-container {
+      flex: 1;
+      height: 100%;
+      background-color: #f8fafc;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .mockup-viewport {
+      width: 100%;
+      min-height: 100%;
+      display: none;
+    }
+
+    .mockup-viewport.active {
+      display: block;
+    }
+
+    /* Common Mockup Elements Utilities */
+    .m-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+  </style>
+
+  <!-- MOCKUP SPECIFIC CSS DESIGNS -->
+  <style>
+    /* ==========================================================================
+       DESIGN 1: APPLE-STYLE MINIMALIST
+       ========================================================================== */
+    .d1-theme {
+      background-color: #ffffff;
+      color: #1d1d1f;
+      font-family: 'Inter', -apple-system, sans-serif;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 100%;
+    }
+    .d1-nav {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 80px;
+      font-size: 0.85rem;
+    }
+    .d1-logo {
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .d1-nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .d1-nav-links a {
+      color: #86868b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .d1-nav-links a:hover {
+      color: #1d1d1f;
+    }
+    .d1-hero {
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .d1-sup {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      color: #86868b;
+    }
+    .d1-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      color: #1d1d1f;
+    }
+    .d1-desc {
+      font-size: 1.25rem;
+      color: #86868b;
+      max-width: 550px;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+    .d1-ctas {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      margin-bottom: 40px;
+    }
+    .d1-btn-primary {
+      background-color: #0071e3;
+      color: white;
+      border-radius: 980px;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+    }
+    .d1-btn-primary:hover {
+      background-color: #0077ed;
+    }
+    .d1-btn-secondary {
+      color: #0071e3;
+      background: transparent;
+      font-size: 0.95rem;
+    }
+    .d1-btn-secondary:hover {
+      text-decoration: underline;
+    }
+    .d1-product-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      height: 350px;
+      margin-top: 20px;
+    }
+    .d1-product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .d1-product-container:hover .d1-product-img {
+      transform: scale(1.05);
+    }
+    .d1-specs {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      margin-top: 60px;
+      border-top: 1px solid #f5f5f7;
+      padding-top: 40px;
+      width: 100%;
+      max-width: 800px;
+    }
+    .d1-spec-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .d1-spec-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .d1-spec-label {
+      font-size: 0.75rem;
+      color: #86868b;
+      text-transform: uppercase;
+    }
+
+    /* ==========================================================================
+       DESIGN 2: CYBERPUNK / GAMER NEON
+       ========================================================================== */
+    .d2-theme {
+      background-color: #0b0f19;
+      background-image: radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.05) 0%, rgba(79, 172, 254, 0) 90%);
+      color: #e2e8f0;
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 60px 40px;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .d2-grid {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      margin-top: 40px;
+    }
+    @media (min-width: 768px) {
+      .d2-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: center;
+      }
+    }
+    .d2-tag {
+      background: linear-gradient(90deg, #00f2fe, #4facfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .d2-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: white;
+      line-height: 1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+    }
+    .d2-title span {
+      color: #00f2fe;
+    }
+    .d2-desc {
+      color: #94a3b8;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .d2-actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .d2-btn-cyber {
+      background: transparent;
+      color: #00f2fe;
+      border: 2px solid #00f2fe;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    }
+    .d2-btn-cyber:hover {
+      background-color: #00f2fe;
+      color: #0b0f19;
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+    }
+    .d2-btn-cyber-alt {
+      background: transparent;
+      color: #94a3b8;
+      font-family: 'Orbitron', sans-serif;
+      border: 1px solid #334155;
+    }
+    .d2-btn-cyber-alt:hover {
+      border-color: #4facfe;
+      color: white;
+    }
+    .d2-tech-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid #1e293b;
+      border-left: 4px solid #00f2fe;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .d2-card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #4facfe;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .d2-stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .d2-stat-box {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .d2-stat-val {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .d2-stat-lbl {
+      font-size: 0.65rem;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .d2-prod-showcase {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+    .d2-img-glow {
+      position: absolute;
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(79, 172, 254, 0) 70%);
+      top: 10%;
+      left: 10%;
+      z-index: 1;
+      filter: blur(20px);
+    }
+    .d2-prod-img {
+      max-width: 100%;
+      height: 380px;
+      object-fit: contain;
+      position: relative;
+      z-index: 2;
+      animation: d2float 4s ease-in-out infinite;
+    }
+    @keyframes d2float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* ==========================================================================
+       DESIGN 3: GLASSMORPHISM / PASTEL GRADIENT
+       ========================================================================== */
+    .d3-theme {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+      color: #f1f5f9;
+      font-family: 'Outfit', sans-serif;
+      padding: 80px 40px;
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .d3-blur-blob {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(192, 132, 252, 0.25) 0%, rgba(192, 132, 252, 0) 70%);
+      filter: blur(40px);
+      z-index: 1;
+    }
+    .d3-blob-1 { top: -50px; left: 10%; }
+    .d3-blob-2 { bottom: -50px; right: 10%; }
+    .d3-container {
+      width: 100%;
+      max-width: 1000px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      z-index: 10;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+    @media (min-width: 768px) {
+      .d3-container {
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+      }
+    }
+    .d3-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .d3-tag {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #c084fc;
+    }
+    .d3-title {
+      font-size: 2.75rem;
+      font-weight: 700;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .d3-desc {
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-size: 1rem;
+    }
+    .d3-ctas {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .d3-btn {
+      background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 12px 28px;
+      box-shadow: 0 10px 20px rgba(129, 140, 248, 0.25);
+    }
+    .d3-btn:hover {
+      box-shadow: 0 10px 25px rgba(129, 140, 248, 0.4);
+      transform: translateY(-2px);
+    }
+    .d3-btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-radius: 12px;
+    }
+    .d3-btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    .d3-showcase {
+      display: flex;
+      justify-content: center;
+    }
+    .d3-glass-plate {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .d3-img {
+      max-height: 300px;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 30px rgba(0,0,0,0.5));
+    }
+
+    /* ==========================================================================
+       DESIGN 4: FEATURE BENTO GRID
+       ========================================================================== */
+    .d4-theme {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-family: 'Outfit', sans-serif;
+      padding: 60px 40px;
+      min-height: 100%;
+    }
+    .d4-header {
+      text-align: center;
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .d4-header h2 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .d4-header p {
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+    .d4-bento {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 20px;
+    }
+    .d4-bento-card {
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .d4-bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    .d4-c1 { grid-column: span 2; grid-row: span 2; height: 380px; }
+    .d4-c2 { grid-column: span 1; height: 180px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); }
+    .d4-c3 { grid-column: span 1; height: 180px; }
+    .d4-c4 { grid-column: span 1; height: 180px; }
+    .d4-c5 { grid-column: span 2; height: 180px; }
+    .d4-card-tag {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #3b82f6;
+      margin-bottom: 8px;
+    }
+    .d4-c2 .d4-card-tag { color: #0369a1; }
+    .d4-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .d4-card-desc {
+      color: #64748b;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .d4-c1-img {
+      position: absolute;
+      bottom: -20px;
+      right: 20px;
+      height: 220px;
+      object-fit: contain;
+    }
+    .d4-stat {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 10px;
+    }
+    .d4-spec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .d4-spec-box {
+      border-left: 3px solid #3b82f6;
+      padding-left: 10px;
+    }
+    .d4-spec-val { font-weight: 700; font-size: 0.95rem; }
+    .d4-spec-lbl { font-size: 0.7rem; color: #64748b; }
+
+    /* ==========================================================================
+       DESIGN 5: SPLIT-SCREEN HERO
+       ========================================================================== */
+    .d5-theme {
+      background-color: #fafafa;
+      color: #171717;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100%;
+      display: flex;
+    }
+    .d5-split {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 768px) {
+      .d5-split {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .d5-left {
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: white;
+    }
+    .d5-right {
+      background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .d5-stars {
+      display: flex;
+      gap: 4px;
+      color: #eab308;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+    }
+    .d5-quote {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: #737373;
+      margin-bottom: 20px;
+    }
+    .d5-title {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .d5-desc {
+      color: #525252;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .d5-btn-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 320px;
+    }
+    .d5-btn {
+      background-color: #f43f5e;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2);
+    }
+    .d5-btn:hover {
+      background-color: #e11d48;
+      box-shadow: 0 6px 16px rgba(244, 63, 94, 0.3);
+    }
+    .d5-btn-link {
+      text-align: center;
+      color: #171717;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .d5-btn-link:hover { text-decoration: underline; }
+    .d5-img {
+      max-width: 90%;
+      max-height: 380px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 25px rgba(0,0,0,0.15));
+    }
+    .d5-carousel-nav {
+      display: flex;
+      gap: 8px;
+      margin-top: 30px;
+    }
+    .d5-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: rgba(244, 63, 94, 0.2);
+      cursor: pointer;
+    }
+    .d5-dot.active {
+      background-color: #f43f5e;
+      width: 24px;
+      border-radius: 100px;
+    }
+
+    /* ==========================================================================
+       DESIGN 6: STORYTELLING EDITORIAL
+       ========================================================================== */
+    .d6-theme {
+      background-color: #fdfbf7;
+      color: #1a2421;
+      font-family: 'Lora', serif;
+      padding: 80px 40px;
+      min-height: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .d6-container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .d6-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #7b8f87;
+      font-weight: 600;
+      border-bottom: 1px solid #e7e3dc;
+      padding-bottom: 12px;
+    }
+    .d6-title {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 1.15;
+      font-style: italic;
+      color: #1a2421;
+    }
+    .d6-img-box {
+      background-color: #f5f1ea;
+      border-radius: 4px;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .d6-img {
+      max-height: 280px;
+      object-fit: contain;
+    }
+    .d6-story {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: #384a43;
+    }
+    .d6-story::first-letter {
+      font-size: 3rem;
+      float: left;
+      line-height: 0.8;
+      padding-top: 4px;
+      padding-right: 8px;
+      font-weight: 700;
+      color: #1a2421;
+    }
+    .d6-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      border-top: 1px solid #e7e3dc;
+      padding-top: 24px;
+      font-family: 'Inter', sans-serif;
+    }
+    .d6-price {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .d6-btn {
+      background-color: #1a2421;
+      color: #fdfbf7;
+      border-radius: 0;
+      padding: 12px 30px;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .d6-btn:hover {
+      background-color: #384a43;
+    }
+
+    /* ==========================================================================
+       DESIGN 7: COMPARISON-FIRST
+       ========================================================================== */
+    .d7-theme {
+      background-color: #ffffff;
+      color: #1e1b4b;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 60px 40px;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .d7-header {
+      text-align: center;
+      max-width: 650px;
+      margin-bottom: 40px;
+    }
+    .d7-badge {
+      background-color: #eef2ff;
+      color: #6366f1;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 6px 12px;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .d7-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .d7-table-container {
+      width: 100%;
+      max-width: 800px;
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.05);
+    }
+    .d7-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .d7-table th, .d7-table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.9rem;
+    }
+    .d7-table th {
+      background-color: #f8fafc;
+      font-weight: 700;
+      color: #475569;
+    }
+    .d7-table tr:last-child td {
+      border-bottom: none;
+    }
+    .d7-highlight {
+      background-color: #f5f3ff;
+      color: #6366f1;
+      font-weight: 700;
+      border-left: 2px solid #6366f1;
+      border-right: 2px solid #6366f1;
+    }
+    .d7-icon {
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+    .d7-yes { color: #10b981; }
+    .d7-no { color: #f43f5e; }
+    .d7-table th.d7-highlight {
+      background-color: #e0e7ff;
+    }
+    .d7-cta-box {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .d7-btn {
+      background-color: #6366f1;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 9999px;
+      font-weight: 700;
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    }
+    .d7-btn:hover {
+      background-color: #4f46e5;
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       DESIGN 8: IMMERSIVE MEDIA
+       ========================================================================== */
+    .d8-theme {
+      background-color: #050505;
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 80px 40px;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .d8-content {
+      max-width: 800px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+    .d8-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    .d8-player-container {
+      width: 100%;
+      max-width: 680px;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #111 0%, #222 100%);
+      border: 1px solid #333;
+      border-radius: 12px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 20px 0;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+    }
+    .d8-media-simulation {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .d8-pulse-circle {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0) 70%);
+      animation: d8pulse 3s infinite;
+    }
+    @keyframes d8pulse {
+      0% { transform: scale(0.8); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+      100% { transform: scale(0.8); opacity: 0.5; }
+    }
+    .d8-prod-silhouette {
+      max-height: 160px;
+      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4));
+      z-index: 2;
+    }
+    .d8-play-btn {
+      position: relative;
+      z-index: 10;
+      width: 60px;
+      height: 60px;
+      background-color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+      border: none;
+    }
+    .d8-play-btn svg {
+      fill: #000;
+      margin-left: 4px;
+    }
+    .d8-play-btn:hover {
+      transform: scale(1.1);
+    }
+    .d8-desc {
+      color: #888;
+      font-size: 0.95rem;
+      max-width: 500px;
+    }
+    .d8-btn {
+      background-color: white;
+      color: black;
+      border-radius: 4px;
+      padding: 12px 28px;
+      font-weight: 700;
+    }
+    .d8-btn:hover {
+      background-color: #eee;
+    }
+
+    /* ==========================================================================
+       DESIGN 9: WARM BOLD GRADIENT & PLAYFUL
+       ========================================================================== */
+    .d9-theme {
+      background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+      color: #4a044e;
+      font-family: 'Lexend', sans-serif;
+      padding: 60px 40px;
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .d9-box {
+      width: 100%;
+      max-width: 900px;
+      background-color: #ffffff;
+      border: 4px solid #4a044e;
+      border-radius: 32px;
+      padding: 40px;
+      box-shadow: 12px 12px 0px #4a044e;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    @media (min-width: 768px) {
+      .d9-box {
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+      }
+    }
+    .d9-tag {
+      background-color: #f0abfc;
+      border: 2px solid #4a044e;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      align-self: flex-start;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .d9-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .d9-desc {
+      color: #701a75;
+      font-size: 1rem;
+      line-height: 1.4;
+      margin-bottom: 24px;
+    }
+    .d9-btn {
+      background-color: #e879f9;
+      color: #4a044e;
+      border: 3px solid #4a044e;
+      padding: 12px 28px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 1rem;
+      box-shadow: 4px 4px 0px #4a044e;
+      display: inline-flex;
+      align-self: flex-start;
+    }
+    .d9-btn:hover {
+      background-color: #f0abfc;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #4a044e;
+    }
+    .d9-showcase {
+      display: flex;
+      justify-content: center;
+      background-color: #fae8ff;
+      border: 3px solid #4a044e;
+      border-radius: 24px;
+      padding: 24px;
+      position: relative;
+    }
+    .d9-img {
+      max-height: 240px;
+      object-fit: contain;
+    }
+
+    /* ==========================================================================
+       DESIGN 10: TRUST-FIRST & SPEC SHEET
+       ========================================================================== */
+    .d10-theme {
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-family: 'Inter', sans-serif;
+      padding: 60px 40px;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .d10-container {
+      width: 100%;
+      max-width: 950px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    @media (min-width: 768px) {
+      .d10-container {
+        grid-template-columns: 1fr 1.1fr;
+      }
+    }
+    .d10-badge-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .d10-badge-item {
+      background-color: white;
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .d10-badge-item svg {
+      color: #10b981;
+      width: 14px;
+      height: 14px;
+    }
+    .d10-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .d10-desc {
+      color: #475569;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .d10-btn {
+      background-color: #0f172a;
+      color: white;
+      border-radius: 8px;
+      padding: 14px 28px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: inline-block;
+      text-align: center;
+    }
+    .d10-btn:hover {
+      background-color: #1e293b;
+    }
+    .d10-stock-alert {
+      font-size: 0.8rem;
+      color: #e11d48;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .d10-stock-alert span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #e11d48;
+      display: inline-block;
+      animation: d10pulse 1s infinite alternate;
+    }
+    @keyframes d10pulse {
+      0% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+    .d10-spec-sheet {
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    .d10-spec-sheet h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 8px;
+    }
+    .d10-spec-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f8fafc;
+      font-size: 0.85rem;
+    }
+    .d10-spec-row:last-child {
+      border-bottom: none;
+    }
+    .d10-spec-name {
+      color: #64748b;
+      font-weight: 500;
+    }
+    .d10-spec-val {
+      color: #0f172a;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Outer shell sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-header">
+        <h1>
+          <!-- Inline SVG Icon for Lab -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Design Lab
+        </h1>
+        <p>10 E-Commerce Gadget Mocks</p>
+      </div>
+      
+      <div class="design-list" id="designList">
+        <button class="design-item active" onclick="switchDesign(1)">
+          <div class="design-title">1. Minimalist Tech</div>
+          <div class="design-desc">Clean white spacing, massive layout elements & macOS style.</div>
+          <span class="design-badge badge-minimal">Apple-style</span>
+        </button>
+        
+        <button class="design-item" onclick="switchDesign(2)">
+          <div class="design-title">2. Cyberpunk Gamer</div>
+          <div class="design-desc">Deep dark background with neon glow & futuristic tags.</div>
+          <span class="design-badge badge-cyber">Dark/Neon</span>
+        </button>
+
+        <button class="design-item" onclick="switchDesign(3)">
+          <div class="design-title">3. Glassmorphism</div>
+          <div class="design-desc">Vibrant background blobs, blurred frosted panels & modern cards.</div>
+          <span class="design-badge badge-glass">Glass</span>
+        </button>
+
+        <button class="design-item" onclick="switchDesign(4)">
+          <div class="design-title">4. Feature Bento Grid</div>
+          <div class="design-desc">Asymmetric modern grid containing detailed feature blocks.</div>
+          <span class="design-badge badge-bento">Bento</span>
+        </button>
+
+        <button class="design-item" onclick="switchDesign(5)">
+          <div class="design-title">5. Split-Screen Hero</div>
+          <div class="design-desc">Bold vertical split: Left side copy, right side media carousel.</div>
+          <span class="design-badge badge-split">Split</span>
+        </button>
+
+        <button class="design-item" onclick="switchDesign(6)">
+          <div class="design-title">6. Story Editorial</div>
+          <div class="design-desc">Warm cream color scheme, serif text layout & editorial styling.</div>
+          <span class="design-badge badge-story">Editorial</span>
+        </button>
+
+        <button class="design-item" onclick="switchDesign(7)">
+          <div class="design-title">7. Comparison-First</div>
+          <div class="design-desc">Head-to-head comparison chart with key competitors above the fold.</div>
+          <span class="design-badge badge-compare">Comparison</span>
+        </button>
+
+        <button class="design-item" onclick="switchDesign(8)">
+          <div class="design-title">8. Immersive Media</div>
+          <div class="design-desc">Dark matte theme featuring simulated animated product spotlight.</div>
+          <span class="design-badge badge-media">Media-centric</span>
+        </button>
+
+        <button class="design-item" onclick="switchDesign(9)">
+          <div class="design-title">9. Bold & Playful</div>
+          <div class="design-desc">Bubble layouts, playful warm gradients & micro-animations.</div>
+          <span class="design-badge badge-bold">Playful</span>
+        </button>
+
+        <button class="design-item" onclick="switchDesign(10)">
+          <div class="design-title">10. Trust-First/Specs</div>
+          <div class="design-desc">ISO badges, detailed spec sheets & real-time inventory counter.</div>
+          <span class="design-badge badge-trust">Specs & Trust</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Container on the Right -->
+  <div class="preview-container">
+
+    <!-- DESIGN 1: APPLE-STYLE MINIMALIST -->
+    <div id="mockup1" class="mockup-viewport d1-theme active">
+      <nav class="d1-nav">
+        <div class="d1-logo">ByteCart Studio</div>
+        <ul class="d1-nav-links">
+          <li><a href="#">Overview</a></li>
+          <li><a href="#">Tech Specs</a></li>
+          <li><a href="#">Reviews</a></li>
+        </ul>
+      </nav>
+      <div class="d1-hero">
+        <span class="d1-sup">Introducing</span>
+        <h1 class="d1-title">Pure sound.<br>Zero distraction.</h1>
+        <p class="d1-desc">Immersive spatial audio meets industry-leading active noise cancellation. Crafted for perfect acoustic response.</p>
+        <div class="d1-ctas">
+          <a class="m-btn d1-btn-primary" href="#">Buy Now</a>
+          <a class="m-btn d1-btn-secondary" href="#">Learn more &gt;</a>
+        </div>
+        <div class="d1-product-container">
+          <img src="https://electronics.sony.com/image/5d02da5df552836db894cebc6920215ee040f229?height=600&width=600&fit=cover" alt="Minimalist Headset" class="d1-product-img">
+        </div>
+        <div class="d1-specs">
+          <div class="d1-spec-item">
+            <span class="d1-spec-value">40h</span>
+            <span class="d1-spec-label">Battery Life</span>
+          </div>
+          <div class="d1-spec-item">
+            <span class="d1-spec-value">250g</span>
+            <span class="d1-spec-label">Ultra-Lightweight</span>
+          </div>
+          <div class="d1-spec-item">
+            <span class="d1-spec-value">40mm</span>
+            <span class="d1-spec-label">Dynamic Drivers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN 2: CYBERPUNK / GAMER NEON -->
+    <div id="mockup2" class="mockup-viewport d2-theme">
+      <div class="d2-grid">
+        <div class="d2-info">
+          <span class="d2-tag">PRO GAMING ACCESSORIES</span>
+          <h1 class="d2-title">DOMINATE<br>THE <span>LOBBY</span></h1>
+          <p class="d2-desc">Equipped with 1.2ms ultra-low latency, custom 50mm Titanium drivers, and 3D positional audio. Hear footsteps before they hear you.</p>
+          <div class="d2-actions">
+            <button class="m-btn d2-btn-cyber">GET GEAR</button>
+            <button class="m-btn d2-btn-cyber-alt">COMPARE MODEL</button>
+          </div>
+          
+          <div class="d2-tech-card">
+            <div class="d2-card-title">// TELEMETRY PROTOCOL</div>
+            <div class="d2-stat-row">
+              <div class="d2-stat-box">
+                <div class="d2-stat-val">1.2ms</div>
+                <div class="d2-stat-lbl">LATENCY STATE</div>
+              </div>
+              <div class="d2-stat-box">
+                <div class="d2-stat-val">112dB</div>
+                <div class="d2-stat-lbl">SENSITIVITY THRESHOLD</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d2-prod-showcase">
+          <div class="d2-img-glow"></div>
+          <img src="https://dlcdnwebimgs.asus.com/gain/4BB18AEF-347E-4DB6-B78C-C0FFE1F20385/w750/h470/fwebp" alt="Cyberpunk Gear" class="d2-prod-img">
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN 3: GLASSMORPHISM / PASTEL GRADIENT -->
+    <div id="mockup3" class="mockup-viewport d3-theme">
+      <div class="d3-blur-blob d3-blob-1"></div>
+      <div class="d3-blur-blob d3-blob-2"></div>
+      
+      <div class="d3-container">
+        <div class="d3-content">
+          <span class="d3-tag">Next-Gen Wearables</span>
+          <h1 class="d3-title">Elegance in Every Detail</h1>
+          <p class="d3-desc">A premium smart wearable designed to blend with your lifestyle. High-resolution AMOLED screen, biometric health metrics, and up to 14 days of battery life.</p>
+          <div class="d3-ctas">
+            <button class="m-btn d3-btn">Pre-Order</button>
+            <button class="m-btn d3-btn-outline">Watch Video</button>
+          </div>
+        </div>
+        
+        <div class="d3-showcase">
+          <div class="d3-glass-plate">
+            <img src="https://waltondigitech.com:8000/media/product_variant_image/best-smartwatch-price-in-bangladesh-walton-tick-R1A-1.png" alt="Smartwatch" class="d3-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN 4: FEATURE BENTO GRID -->
+    <div id="mockup4" class="mockup-viewport d4-theme">
+      <div class="d4-header">
+        <h2>The All-in-One Powerhouse.</h2>
+        <p>Everything you need, built into a beautiful, functional layout.</p>
+      </div>
+      
+      <div class="d4-bento">
+        <div class="d4-bento-card d4-c1">
+          <span class="d4-card-tag">FLAGSHIP MODEL</span>
+          <h3 class="d4-card-title">iPhone 17 Pro Concept</h3>
+          <p class="d4-card-desc" style="max-width: 50%;">Visor camera array, titanium framing, and next-generation neural chip.</p>
+          <img src="https://www.concept-phones.com/wp-content/uploads/2024/12/iphone-17-pro-max-visor-camera-design-render-2-1536x1478.jpg" alt="Concept Phone" class="d4-c1-img">
+        </div>
+        
+        <div class="d4-bento-card d4-c2">
+          <span class="d4-card-tag">BATTERY POWER</span>
+          <h3 class="d4-card-title" style="margin-bottom: 0;">Longer Life</h3>
+          <div class="d4-stat">48 Hours</div>
+          <p class="d4-card-desc" style="color: #0369a1; margin-top: 4px;">With intelligent energy scaling.</p>
+        </div>
+        
+        <div class="d4-bento-card d4-c3">
+          <span class="d4-card-tag">CHIPSET</span>
+          <h3 class="d4-card-title">A20 Neural</h3>
+          <p class="d4-card-desc">Designed with 3nm architecture for rapid AI calculations.</p>
+        </div>
+        
+        <div class="d4-bento-card d4-c4">
+          <span class="d4-card-tag">RATING</span>
+          <h3 class="d4-card-title" style="margin-bottom: 0;">4.9 / 5.0</h3>
+          <div class="d4-stat" style="color: #eab308; font-size: 1.5rem; margin-top: 4px;">★★★★★</div>
+          <p class="d4-card-desc" style="margin-top: auto;">Over 10k verified customer ratings.</p>
+        </div>
+        
+        <div class="d4-bento-card d4-c5">
+          <span class="d4-card-tag">SPECIFICATIONS</span>
+          <div class="d4-spec-grid">
+            <div class="d4-spec-box">
+              <div class="d4-spec-val">120Hz</div>
+              <div class="d4-spec-lbl">Display Refresh</div>
+            </div>
+            <div class="d4-spec-box">
+              <div class="d4-spec-val">200MP</div>
+              <div class="d4-spec-lbl">Camera array</div>
+            </div>
+            <div class="d4-spec-box">
+              <div class="d4-spec-val">IP68</div>
+              <div class="d4-spec-lbl">Water & Dust Rating</div>
+            </div>
+            <div class="d4-spec-box">
+              <div class="d4-spec-val">12GB</div>
+              <div class="d4-spec-lbl">LPDDR5X RAM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN 5: SPLIT-SCREEN HERO -->
+    <div id="mockup5" class="mockup-viewport d5-theme">
+      <div class="d5-split">
+        <div class="d5-left">
+          <div class="d5-stars">
+            ★★★★★ <span class="d5-quote">"The absolute best handheld gaming experience."</span>
+          </div>
+          <h1 class="d5-title">Unleash Next Gen Gaming</h1>
+          <p class="d5-desc">Take your favorite console titles anywhere. 7-inch OLED panel, ergonomic handles, and massive thermal capabilities for peak performance.</p>
+          <div class="d5-btn-box">
+            <a href="#" class="m-btn d5-btn">Buy Nintendo Switch OLED</a>
+            <a href="#" class="d5-btn-link">View hardware specifications</a>
+          </div>
+        </div>
+        <div class="d5-right">
+          <img src="https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_1.5/c_scale,w_600/ncom/en_US/switch/site-design-update/hardware/switch/oled-model/gallery/white/01" alt="Nintendo Switch" class="d5-img">
+          
+          <div class="d5-carousel-nav">
+            <span class="d5-dot active"></span>
+            <span class="d5-dot"></span>
+            <span class="d5-dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN 6: STORYTELLING EDITORIAL -->
+    <div id="mockup6" class="mockup-viewport d6-theme">
+      <div class="d6-container">
+        <div class="d6-meta">Journal // Issue 14 // Drone Engineering</div>
+        <h1 class="d6-title">Crafted for the conscious dynamic explorer.</h1>
+        <div class="d6-img-box">
+          <img src="https://dji-official-aps.dji.com/cms/uploads/00f918e958197171d87e0766dd39403d.png" alt="DJI Drone" class="d6-img">
+        </div>
+        <p class="d6-story">Designing a drone under 249 grams that performs like a cinematic rig requires sacrificing nothing. The DJI Mini 4 Pro integrates a 1/1.3-inch CMOS camera, omnidirectional obstacle sensing, and a redesigned gimbal structure. Every curve is optimized for aerodynamic drag reduction, enabling longer flights with quiet efficiency.</p>
+        <div class="d6-footer">
+          <span class="d6-price">₦948,750</span>
+          <button class="m-btn d6-btn">Reserve Order</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN 7: COMPARISON-FIRST -->
+    <div id="mockup7" class="mockup-viewport d7-theme">
+      <div class="d7-header">
+        <span class="d7-badge">Challenger Choice</span>
+        <h2 class="d7-title">Why pay more for just a brand name?</h2>
+      </div>
+      
+      <div class="d7-table-container">
+        <table class="d7-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="d7-highlight">ByteCart Pro</th>
+              <th>Competitor A</th>
+              <th>Competitor B</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Active Noise Cancellation</td>
+              <td class="d7-highlight"><span class="d7-icon d7-yes">✓</span> Ultra 45dB</td>
+              <td><span class="d7-icon d7-yes">✓</span> 35dB</td>
+              <td><span class="d7-icon d7-no">✗</span> None</td>
+            </tr>
+            <tr>
+              <td>Battery Playback Time</td>
+              <td class="d7-highlight">50 Hours</td>
+              <td>30 Hours</td>
+              <td>20 Hours</td>
+            </tr>
+            <tr>
+              <td>Water Resistance</td>
+              <td class="d7-highlight"><span class="d7-icon d7-yes">✓</span> IPX7</td>
+              <td><span class="d7-icon d7-yes">✓</span> IPX4</td>
+              <td><span class="d7-icon d7-no">✗</span> IPX2</td>
+            </tr>
+            <tr>
+              <td>Warranty Protection</td>
+              <td class="d7-highlight">3 Years</td>
+              <td>1 Year</td>
+              <td>1 Year</td>
+            </tr>
+            <tr>
+              <td>Retail Price</td>
+              <td class="d7-highlight">₦45,000</td>
+              <td>₦120,000</td>
+              <td>₦85,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="d7-cta-box">
+        <button class="m-btn d7-btn">Choose ByteCart Pro</button>
+        <span style="font-size: 0.75rem; color: #64748b;">*30-day money-back guarantee, zero risk.</span>
+      </div>
+    </div>
+
+    <!-- DESIGN 8: IMMERSIVE MEDIA -->
+    <div id="mockup8" class="mockup-viewport d8-theme">
+      <div class="d8-content">
+        <h1 class="d8-title">See the Future in Action.</h1>
+        <p class="d8-desc">Experience 3D mixed-reality with the highly-acclaimed Apple Vision Pro. Walk through high-fidelity visual structures before purchasing.</p>
+        
+        <div class="d8-player-container">
+          <div class="d8-media-simulation">
+            <div class="d8-pulse-circle"></div>
+            <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/vision-pro-gallery-1-202402?wid=600&hei=600&fmt=jpeg&qlt=95&.v=1706240428980" alt="Vision Pro Silhouette" class="d8-prod-silhouette">
+          </div>
+          <button class="d8-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+        
+        <button class="m-btn d8-btn">Order Demo Flight</button>
+      </div>
+    </div>
+
+    <!-- DESIGN 9: WARM BOLD GRADIENT & PLAYFUL -->
+    <div id="mockup9" class="mockup-viewport d9-theme">
+      <div class="d9-box">
+        <div class="d9-info">
+          <span class="d9-tag">BIG DEALS!</span>
+          <h1 class="d9-title">Tech that smiles back!</h1>
+          <p class="d9-desc">Say hello to the Sony WH-1000XM5 headphones. The sound is gigantic, the feel is like clouds, and the look is pure gold!</p>
+          <button class="m-btn d9-btn">Grab Yours! ✨</button>
+        </div>
+        
+        <div class="d9-showcase">
+          <img src="https://electronics.sony.com/image/5d02da5df552836db894cebc6920215ee040f229?height=600&width=600&fit=cover" alt="Happy Sony Headset" class="d9-img">
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN 10: TRUST-FIRST & SPEC SHEET -->
+    <div id="mockup10" class="mockup-viewport d10-theme">
+      <div class="d10-container">
+        <div class="d10-info">
+          <h1 class="d10-title">Premium Enterprise-Grade Hardware</h1>
+          <p class="d10-desc">Designed to support professional studio monitoring and audio editing pipelines. Backed by industry certifications and lifetime support structure.</p>
+          
+          <button class="m-btn d10-btn">Submit RFQ / Order</button>
+          
+          <div class="d10-stock-alert">
+            <span></span> IN STOCK: Ready to dispatch from Lagos Hub within 12 hours.
+          </div>
+          
+          <div class="d10-badge-row">
+            <div class="d10-badge-item">
+              <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              ISO 9001 Certified
+            </div>
+            <div class="d10-badge-item">
+              <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              30-Day Guarantee
+            </div>
+          </div>
+        </div>
+        
+        <div class="d10-spec-sheet">
+          <h3>TECHNICAL PARAMETERS</h3>
+          <div class="d10-spec-row">
+            <span class="d10-spec-name">Acoustic Coupling</span>
+            <span class="d10-spec-val">Circumaural (Closed Back)</span>
+          </div>
+          <div class="d10-spec-row">
+            <span class="d10-spec-name">Nominal Impedance</span>
+            <span class="d10-spec-val">48 Ohms</span>
+          </div>
+          <div class="d10-spec-row">
+            <span class="d10-spec-name">Frequency Range</span>
+            <span class="d10-spec-val">4 Hz - 40,000 Hz</span>
+          </div>
+          <div class="d10-spec-row">
+            <span class="d10-spec-name">Total Harmonic Distortion</span>
+            <span class="d10-spec-val">&lt; 0.05% (1 kHz)</span>
+          </div>
+          <div class="d10-spec-row">
+            <span class="d10-spec-name">Connection Matrix</span>
+            <span class="d10-spec-val">Bluetooth 5.2 / LDAC / Wired</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchDesign(index) {
+      const items = document.querySelectorAll('.design-item');
+      items.forEach(item => item.classList.remove('active'));
+      
+      const viewports = document.querySelectorAll('.mockup-viewport');
+      viewports.forEach(viewport => viewport.classList.remove('active'));
+      
+      items[index - 1].classList.add('active');
+      document.getElementById('mockup' + index).classList.add('active');
+    }
+  </script>
+</body>
+</html>
