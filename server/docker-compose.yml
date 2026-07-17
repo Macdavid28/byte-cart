@@ -6,7 +6,7 @@ services:
       - "8090:8090"
     environment:
       PORT: 8090
-      MONGO_URI: mongodb://admin:password@mongodb:27017/bytecart
+      MONGO_URI: mongodb://admin:password@mongodb:27017/bytecart?authSource=admin
     depends_on:
       - mongodb
     restart: unless-stopped

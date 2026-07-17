@@ -53,7 +53,7 @@ app.use("/api/cart", globalLimiter, cartRoutes);
 app.use("/api/orders", globalLimiter, orderRoutes);
 app.use("/api/reviews", globalLimiter, reviewRoutes);
 app.use("/api/users", globalLimiter, userRoutes);
-const PORT = process.env.SERVER_PORT || 5000;
+const PORT = process.env.SERVER_PORT || 8090;
 app.listen(PORT, () => {
   connectDb();
   console.log(`Port running on http://localhost:${PORT}`);
